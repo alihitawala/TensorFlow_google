@@ -65,7 +65,7 @@ with g.as_default():
                             )
                         ) - 1)
                     ), dense_x[str(i)])
-            gradients.append(tf.mul(local_gradient, 0.1))
+            gradients.append(local_gradient)
 
     # we create an operator to aggregate the local gradients
     with tf.device("/job:worker/task:0"):
