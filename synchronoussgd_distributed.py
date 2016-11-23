@@ -70,7 +70,7 @@ with g.as_default():
     # we create an operator to aggregate the local gradients
     with tf.device("/job:worker/task:0"):
         aggregator = tf.add_n(gradients)
-        assign_op = w.assign_add(tf.mul(aggregator, -0.01))
+        assign_op = w.assign_add(tf.mul(aggregator, -0.1))
 
     with tf.device("/job:worker/task:0"):
         test_dense_x, test_label = get_dense_x(test_file_names)
