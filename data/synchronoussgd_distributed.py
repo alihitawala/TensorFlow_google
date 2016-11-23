@@ -43,31 +43,28 @@ def get_dense_x(file_names):
 with g.as_default():
     # Create a model
     with tf.device("/job:worker/task:0"):
-        w = tf.Variable(tf.ones([num_features, 1]), name="model")
+        w = tf.Variable(tf.zeros([num_features, 1]), name="model")
 
     # Compute the gradient
     gradients = []
     dense_x = {}
     for i in range(0, 5):
         with tf.device("/job:worker/task:%d" % i):
-            reader = tf.ones([10, 1], name="operator_%d" % i)
+            # reader = tf.ones([10, 1], name="operator_%d" % i)
             dense_x[str(i)], label_1 = get_dense_x(file_names[str(i)])
             local_gradient = tf.mul(
                     tf.mul(
                         tf.cast(label_1, tf.float32),
-                        tf.sigmoid(
+                        (tf.sigmoid(
                             tf.mul(
                                 tf.cast(label_1, tf.float32),
                                 tf.matmul(
                                     tf.transpose(w),
                                     dense_x[str(i)]
-                                ) - 1
+                                )
                             )
-                        )
+                        ) - 1)
                     ), dense_x[str(i)])
-            loss = tf.mul(-1.0, tf.cast(tf.log(tf.sigmoid(tf.mul(tf.cast(label_1, tf.float32), tf.matmul(
-                                tf.transpose(w),
-                                dense_x[str(i)])))), tf.float32))
             gradients.append(tf.mul(local_gradient, 0.1))
 
     # we create an operator to aggregate the local gradients
@@ -75,10 +72,10 @@ with g.as_default():
         aggregator = tf.add_n(gradients)
         assign_op = w.assign_add(tf.mul(aggregator, -0.01))
 
-    with tf.device("/job:worker/task:0"):
-        test_dense_x, test_label = get_dense_x(test_file_names)
-        sign_actual = tf.cast(tf.sign(tf.matmul(tf.transpose(w), test_dense_x)[0][0]), tf.int64)
-        sign_expected = tf.sign(test_label[0])
+    # with tf.device("/job:worker/task:0"):
+    #     test_dense_x, test_label = get_dense_x(test_file_names)
+    #     sign_actual = tf.cast(tf.sign(tf.matmul(tf.transpose(w), test_dense_x)[0][0]), tf.int64)
+    #     sign_expected = tf.sign(test_label[0])
 
     # Create a session
     with tf.Session("grpc://vm-8-1:2222") as sess:
@@ -90,11 +87,5 @@ with g.as_default():
         count = 0
         for i in range(0, n):
             output = sess.run(assign_op)
-            print output
-            if i % 10 == 0:
-                for j in range(0,100):
-                    sign_actual_out = sess.run(sign_actual)
-                    sign_expected_out = sess.run(sign_expected)
-                    count += 1 if sign_actual_out == sign_expected_out else 0
-                print count, i+1
-                count = 0
+            print sum(output)
+        sess.close()
