@@ -10,7 +10,7 @@ FLAGS = tf.app.flags.FLAGS
 #
 tf.logging.set_verbosity(tf.logging.DEBUG)
 
-GROUP_NUM=48
+GROUP_NUM=8
 
 clusterSpec = tf.train.ClusterSpec({
     "worker" : [
