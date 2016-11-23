@@ -72,10 +72,23 @@ with g.as_default():
         aggregator = tf.add_n(gradients)
         assign_op = w.assign_add(tf.mul(aggregator, -0.01))
 
-    # with tf.device("/job:worker/task:0"):
-    #     test_dense_x, test_label = get_dense_x(test_file_names)
-    #     sign_actual = tf.cast(tf.sign(tf.matmul(tf.transpose(w), test_dense_x)[0][0]), tf.int64)
-    #     sign_expected = tf.sign(test_label[0])
+    with tf.device("/job:worker/task:0"):
+        test_dense_x, test_label = get_dense_x(test_file_names)
+        loss = tf.mul(
+                -1.0,
+                tf.cast(tf.log(
+                    tf.sigmoid(
+                        tf.mul(
+                            tf.cast(test_label, tf.float32),
+                            tf.matmul(
+                                tf.transpose(w),
+                                test_dense_x
+                            )
+                        )
+                    )
+                ), tf.float32))
+        sign_actual = tf.cast(tf.sign(tf.matmul(tf.transpose(w), test_dense_x)[0][0]), tf.int64)
+        sign_expected = tf.sign(test_label[0])
 
     # Create a session
     with tf.Session("grpc://vm-8-1:2222") as sess:
@@ -88,4 +101,7 @@ with g.as_default():
         for i in range(0, n):
             output = sess.run(assign_op)
             print sum(output)
+            if i % 10 == 0:
+                loss_out = sess.run(loss)
+                print loss_out
         sess.close()
