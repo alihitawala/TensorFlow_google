@@ -3,7 +3,7 @@ export TF_RUN_DIR="/home/ubuntu/run/"
 export TF_BINARY_URL="https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.11.0rc2-cp27-none-linux_x86_64.whl"
 
 # modify the below to your group number
-export GROUP_NUM=48
+export GROUP_NUM=8
 
 function terminate_cluster() {
     echo "Terminating the servers"

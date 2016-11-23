@@ -50,7 +50,7 @@ with g.as_default():
         retval = tf.add_n(intermediate_traces.values())
 
     config = tf.ConfigProto(log_device_placement=True)
-    with tf.Session("grpc://vm-48-2:2222", config=config) as sess:
+    with tf.Session("grpc://vm-8-2:2222", config=config) as sess:
         result = sess.run(retval)
         sess.close()
         print "SUCCESS"
