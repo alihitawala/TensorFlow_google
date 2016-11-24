@@ -109,7 +109,7 @@ with g.as_default():
         count = 0
         for i in range(0, n):
             output = sess.run(assign_op)
-            # print sum(output)
+            print (output)
             if i % 10 == 0:
                 loss_out = sess.run(loss)
                 print loss_out
