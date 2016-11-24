@@ -74,7 +74,11 @@ with g.as_default():
 
     # we create an operator to aggregate the local gradients
     with tf.device("/job:worker/task:0"):
-        aggregator = tf.add_n(gradients)
+        dense_gradients = []
+        for g in gradients:
+            dense_grad = tf.sparse_tensor_to_dense(g)
+            dense_gradients.append(dense_grad)
+        aggregator = tf.add_n(dense_gradients)
         assign_op = w.assign_add(tf.mul(aggregator, -0.1))
 
     with tf.device("/job:worker/task:0"):
