@@ -1,6 +1,6 @@
 import tensorflow as tf
 import os
-
+ ## TODO enhancement tf.sparse_tensor_dense_matmul(...)
 
 # Number of features
 num_features = 33762578
@@ -59,6 +59,11 @@ with g.as_default():
                             )
                         ) - 1)
                     ), dense_x))
+    zero = tf.constant(0, dtype=tf.float32)
+    where = tf.not_equal(gradient, zero)
+    indices = tf.where(where)
+    masked = tf.boolean_mask(gradient, where)
+    sparse_gradient = tf.SparseTensor(indices, tf.transpose(masked), [num_features, 1])
 
     # Update the model
     update_model = w.assign_add(tf.mul(gradient, -0.1))
@@ -77,5 +82,5 @@ with g.as_default():
         # print sum(out)
         # output = sess.run(w)
         # output_x = sess.run(dense_x)
-        output_g = sess.run(update_model)
-        print sum(output_g)
+        output_g = sess.run(sparse_gradient)
+        print (output_g)

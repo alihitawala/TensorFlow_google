@@ -65,7 +65,12 @@ with g.as_default():
                             )
                         ) - 1)
                     ), dense_x[str(i)])
-            gradients.append(local_gradient)
+            zero = tf.constant(0, dtype=tf.float32)
+            where = tf.not_equal(local_gradient, zero)
+            indices = tf.where(where)
+            masked = tf.boolean_mask(local_gradient, where)
+            sparse_gradient = tf.SparseTensor(indices, tf.transpose(masked), [num_features, 1])
+            gradients.append(sparse_gradient)
 
     # we create an operator to aggregate the local gradients
     with tf.device("/job:worker/task:0"):
@@ -100,7 +105,7 @@ with g.as_default():
         count = 0
         for i in range(0, n):
             output = sess.run(assign_op)
-            print sum(output)
+            # print sum(output)
             if i % 10 == 0:
                 loss_out = sess.run(loss)
                 print loss_out
