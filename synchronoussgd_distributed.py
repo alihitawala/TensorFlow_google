@@ -80,8 +80,6 @@ with g.as_default():
             dense_gradients.append(dense_grad)
         aggregator = tf.add_n(dense_gradients)
         assign_op = w.assign_add(tf.mul(aggregator, -0.1))
-
-    with tf.device("/job:worker/task:0"):
         test_dense_x, test_label = get_dense_x(test_file_names)
         loss = tf.mul(
                 -1.0,
