@@ -48,7 +48,7 @@ with g.as_default():
     # Compute the gradient
     gradients = []
     # dense_x = {}
-    for i in range(0, 5):
+    for i in range(0, 1):
         with tf.device("/job:worker/task:%d" % i):
             # reader = tf.ones([10, 1], name="operator_%d" % i)
             dense_x, label_1 = get_dense_x(file_names[str(i)])
