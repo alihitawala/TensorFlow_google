@@ -1,5 +1,5 @@
 import tensorflow as tf
-import os
+import time
 
 
 # Number of features
@@ -95,7 +95,7 @@ with g.as_default():
                         )
                     )
                 ), tf.float32))
-        sign_actual = tf.cast(-1, tf.int64)#tf.cast(tf.sign(tf.matmul(tf.transpose(tt), test_dense_x)[0][0]), tf.int64)
+        sign_actual = tf.cast(tf.sign(tf.matmul(tf.transpose(tt), test_dense_x)[0][0]), tf.int64)
         sign_expected = tf.sign(test_label[0])
         sign_values = [sign_actual, sign_expected]
 
@@ -106,12 +106,13 @@ with g.as_default():
         tf.train.start_queue_runners(sess=sess)
         # Run n iterations
         n = 2000
-        e = 200
+        e = 20
         count = 0
         for i in range(0, n):
             output = sess.run(assign_op)
             print (output)
             if i % 10 == 0:
+                start = time.time()
                 count = 0
                 for j in range(0,e):
                     output_sign = sess.run(sign_values)
@@ -119,5 +120,5 @@ with g.as_default():
                         count+=1
                 print "*********" + str(count), str(e) + "**********"
                 # loss_out = sess.run(loss)
-                # print loss_out
+                print "Time :: " + str(time.time() - start)
         sess.close()
