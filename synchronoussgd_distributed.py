@@ -95,7 +95,7 @@ with g.as_default():
                         )
                     )
                 ), tf.float32))
-        sign_actual = tf.cast(tf.sign(tf.matmul(tf.transpose(tt), test_dense_x)[0][0]), tf.int64)
+        sign_actual = -1#tf.cast(tf.sign(tf.matmul(tf.transpose(tt), test_dense_x)[0][0]), tf.int64)
         sign_expected = tf.sign(test_label[0])
         sign_values = [sign_actual, sign_expected]
 
