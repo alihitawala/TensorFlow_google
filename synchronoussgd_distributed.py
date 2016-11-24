@@ -47,11 +47,11 @@ with g.as_default():
 
     # Compute the gradient
     gradients = []
-    dense_x = {}
+    # dense_x = {}
     for i in range(0, 5):
         with tf.device("/job:worker/task:%d" % i):
             # reader = tf.ones([10, 1], name="operator_%d" % i)
-            dense_x[str(i)], label_1 = get_dense_x(file_names[str(i)])
+            dense_x, label_1 = get_dense_x(file_names[str(i)])
             local_gradient = tf.mul(
                     tf.mul(
                         tf.cast(label_1, tf.float32),
@@ -60,11 +60,11 @@ with g.as_default():
                                 tf.cast(label_1, tf.float32),
                                 tf.matmul(
                                     tf.transpose(w),
-                                    dense_x[str(i)]
+                                    dense_x
                                 )
                             )
                         ) - 1)
-                    ), dense_x[str(i)])
+                    ), dense_x)
             zero = tf.constant(0, dtype=tf.float32)
             where = tf.not_equal(local_gradient, zero)
             indices = tf.where(where)
