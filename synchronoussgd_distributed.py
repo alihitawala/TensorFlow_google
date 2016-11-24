@@ -44,6 +44,7 @@ with g.as_default():
     # Create a model
     with tf.device("/job:worker/task:0"):
         w = tf.Variable(tf.zeros([num_features, 1]), name="model")
+        tt = tf.Variable(tf.zeros([num_features, 1]), name="model")
 
     # Compute the gradient
     gradients = []
@@ -94,7 +95,7 @@ with g.as_default():
                         )
                     )
                 ), tf.float32))
-        sign_actual = tf.cast(tf.sign(tf.matmul(tf.transpose(w), test_dense_x)[0][0]), tf.int64)
+        sign_actual = tf.cast(tf.sign(tf.matmul(tf.transpose(tt), test_dense_x)[0][0]), tf.int64)
         sign_expected = tf.sign(test_label[0])
         sign_values = [sign_actual, sign_expected]
 
@@ -105,7 +106,7 @@ with g.as_default():
         tf.train.start_queue_runners(sess=sess)
         # Run n iterations
         n = 2000
-        e = 2000
+        e = 200
         count = 0
         for i in range(0, n):
             output = sess.run(assign_op)
