@@ -96,6 +96,7 @@ with g.as_default():
                 ), tf.float32))
         sign_actual = tf.cast(tf.sign(tf.matmul(tf.transpose(w), test_dense_x)[0][0]), tf.int64)
         sign_expected = tf.sign(test_label[0])
+        sign_values = [sign_actual, sign_expected]
 
     # Create a session
     with tf.Session("grpc://vm-8-1:2222") as sess:
@@ -104,11 +105,18 @@ with g.as_default():
         tf.train.start_queue_runners(sess=sess)
         # Run n iterations
         n = 2000
+        e = 2000
         count = 0
         for i in range(0, n):
             output = sess.run(assign_op)
             print (output)
             if i % 10 == 0:
-                loss_out = sess.run(loss)
-                print loss_out
+                count = 0
+                for j in range(0,e):
+                    output_sign = sess.run(sign_values)
+                    if output_sign[0] != output_sign[1]:
+                        count+=1
+                print "*********" + str(count), str(e) + "**********"
+                # loss_out = sess.run(loss)
+                # print loss_out
         sess.close()
