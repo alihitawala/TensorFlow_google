@@ -95,7 +95,7 @@ with g.as_default():
                         )
                     )
                 ), tf.float32))
-        sign_actual = tf.cast(tf.sign(tf.matmul(tf.transpose(tt), test_dense_x)[0][0]), tf.int64)
+        sign_actual = tf.cast(tf.sign(tf.matmul(tf.transpose(w), test_dense_x)[0][0]), tf.int64)
         sign_expected = tf.sign(test_label[0])
         sign_values = [sign_actual, sign_expected]
 
@@ -106,11 +106,14 @@ with g.as_default():
         tf.train.start_queue_runners(sess=sess)
         # Run n iterations
         n = 2000
-        e = 20
+        e = 200
         count = 0
         for i in range(0, n):
+            start = time.time();
             output = sess.run(assign_op)
-            print (output)
+            print output
+            print "Time taken for training iteration: " + str(i) + ": " + str(time.time() - start)
+            print "============================================="
             if i % 10 == 0:
                 start = time.time()
                 count = 0
@@ -118,7 +121,9 @@ with g.as_default():
                     output_sign = sess.run(sign_values)
                     if output_sign[0] != output_sign[1]:
                         count+=1
-                print "*********" + str(count), str(e) + "**********"
+                print "-------------------------------------------------"
+                print "*********Mistakes: " + str(count), str(e) + "**********"
                 # loss_out = sess.run(loss)
-                print "Time :: " + str(time.time() - start)
+                print "Time in calculating mistakes on test set: " + str(time.time() - start)
+                print "-------------------------------------------------"
         sess.close()
