@@ -40,10 +40,13 @@ def get_dense_x(file_names):
             tf.sparse_tensor_to_dense(value))
     return tf.reshape(dense_x, [num_features, 1]), label
 
+tf.set_random_seed(1024)
+
 with g.as_default():
     # Create a model
     with tf.device("/job:worker/task:0"):
-        w = tf.Variable(tf.zeros([num_features, 1]), name="model")
+        #w = tf.Variable(tf.ones([num_features, 1]), name="model")
+        w = tf.Variable(tf.random_uniform([num_features, 1]), name="model")
         tt = tf.Variable(tf.zeros([num_features, 1]), name="model")
 
     # Compute the gradient
@@ -80,7 +83,7 @@ with g.as_default():
             dense_grad = tf.sparse_tensor_to_dense(g)
             dense_gradients.append(dense_grad)
         aggregator = tf.add_n(dense_gradients)
-        assign_op = w.assign_add(tf.mul(aggregator, -0.1))
+        assign_op = tf.assign_add(w, tf.mul(aggregator, -0.01))
         test_dense_x, test_label = get_dense_x(test_file_names)
         loss = tf.mul(
                 -1.0,
@@ -111,8 +114,7 @@ with g.as_default():
         for i in range(0, n):
             start = time.time();
             output = sess.run(assign_op)
-            print output
-            print "Time taken for training iteration: " + str(i) + ": " + str(time.time() - start)
+            print "Time taken for training iteration " + str(i) + ": " + str(time.time() - start)
             print "============================================="
             if i % 10 == 0:
                 start = time.time()
