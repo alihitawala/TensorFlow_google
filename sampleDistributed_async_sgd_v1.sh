@@ -1,17 +1,12 @@
 #!/bin/bash
-
-# tfdefs.sh has helper function to start process on all VMs
-# it contains definition for start_cluster and terminate_cluster
 source tfdefs.sh
-
-# startserver.py has the specifications for the cluster.
 start_cluster startserver.py
-
-echo "Executing the distributed tensorflow job from asynchronoussgd_distributed.py"
-# testdistributed.py is a client that can run jobs on the cluster.
-# please read testdistributed.py to understand the steps defining a Graph and
-# launch a session to run the Graph
-python asynchronoussgd_distributed_optimized.py
-
+# start multiple clients
+nohup python asynchronoussgd_distributed_optimized.py --task_index=0 > asynclog-0.out 2>&1&
+sleep 2 # wait for variable to be initialized
+nohup python asynchronoussgd_distributed_optimized.py --task_index=1 > asynclog-1.out 2>&1&
+nohup python asynchronoussgd_distributed_optimized.py --task_index=2 > asynclog-2.out 2>&1&
+nohup python asynchronoussgd_distributed_optimized.py --task_index=3 > asynclog-3.out 2>&1&
+nohup python asynchronoussgd_distributed_optimized.py --task_index=4 > asynclog-4.out 2>&1&
 # defined in tfdefs.sh to terminate the cluster
 terminate_cluster
