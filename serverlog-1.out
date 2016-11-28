@@ -1,7 +1,4 @@
 I tensorflow/core/distributed_runtime/rpc/grpc_channel.cc:197] Initialize GrpcChannelCache for job worker -> {0 -> localhost:2222, 1 -> vm-8-2:2222, 2 -> vm-8-3:2222, 3 -> vm-8-4:2222, 4 -> vm-8-5:2222}
 I tensorflow/core/distributed_runtime/rpc/grpc_server_lib.cc:206] Started server with target: grpc://localhost:2222
-I tensorflow/core/distributed_runtime/master_session.cc:928] Start master session 62e0716b4c965ac4 with config: 
+I tensorflow/core/distributed_runtime/master_session.cc:928] Start master session 527705879eecb503 with config: 
 
-W tensorflow/core/kernels/queue_base.cc:294] _1_input_producer_1: Skipping cancelled enqueue attempt with queue not closed
-W tensorflow/core/kernels/queue_base.cc:294] _0_input_producer: Skipping cancelled enqueue attempt with queue not closed
-bash: line 1: 12634 Killed                  python startserver.py --task_index=0

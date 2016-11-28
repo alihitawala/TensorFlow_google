@@ -8,7 +8,7 @@ num_features = 33762578
 g = tf.Graph()
 
 # Get the list of all files in the input data directory
-data_dir = "./data/criteo-tfr-tiny"
+data_dir = "./data/criteo-tfr-big"
 file_names = {
     '0': [data_dir + '/tfrecords00', data_dir + '/tfrecords01', data_dir + '/tfrecords02', data_dir + '/tfrecords03',
           data_dir + '/tfrecords04'],

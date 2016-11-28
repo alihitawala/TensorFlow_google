@@ -6,7 +6,7 @@ import os
 num_features = 33762578
 
 g = tf.Graph()
-data_dir = "./data/criteo-tfr-tiny"
+data_dir = "./data/criteo-tfr-big"
 file_names = [data_dir + '/tfrecords00']
 
 with g.as_default():
@@ -82,5 +82,5 @@ with g.as_default():
         # print sum(out)
         # output = sess.run(w)
         # output_x = sess.run(dense_x)
-        output_g = sess.run(sparse_gradient)
+        output_g = sess.run(update_model)
         print (output_g)
