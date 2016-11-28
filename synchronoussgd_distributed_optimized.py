@@ -54,7 +54,7 @@ with g.as_default():
     # Compute the gradient
     gradients = []
     # dense_x = {}
-    for i in range(0, 1):
+    for i in range(0, 5):
         with tf.device("/job:worker/task:%d" % i):
             label, index, value = get_next_row(file_names[str(i)])
             w_filtered = tf.gather(w, index.values)
