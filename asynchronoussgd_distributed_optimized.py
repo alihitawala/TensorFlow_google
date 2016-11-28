@@ -106,7 +106,7 @@ with g.as_default():
         for i in range(0, n):
             start = time.time()
             output = sess.run(assign_op)
-            print "Time taken for training iteration " + str(i) + " at : vm-" + FLAGS.task_index+1 + " : " + str(time.time() - start)
+            print "Time taken for training iteration " + str(i) + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start)
             if FLAGS.task_index == 0 and i % 10 == 0:
                 start = time.time()
                 count = 0
@@ -117,5 +117,5 @@ with g.as_default():
                 print "*********Mistakes: " + str(count), str(e) + "**********"
                 # loss_out = sess.run(loss)
                 print "Time in calculating mistakes on test set: " + str(time.time() - start)
-        print "Total time taken for " + str(n) + " iterations : " + " at : vm-" + FLAGS.task_index+1 + " : " + str(time.time() - start_total)
+        print "Total time taken for " + str(n) + " iterations : " + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start_total)
         sess.close()
