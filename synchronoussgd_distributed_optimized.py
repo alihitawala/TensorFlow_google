@@ -89,21 +89,11 @@ with g.as_default():
         aggregator = tf.add_n(dense_gradients)
         assign_op = tf.assign_add(w, tf.mul(aggregator, -0.01))
         test_label, test_index, test_value = get_next_row(test_file_names)
-        test_dense_x = get_dense_x(test_index, test_value)
-        loss = tf.mul(
-                -1.0,
-                tf.cast(tf.log(
-                    tf.sigmoid(
-                        tf.mul(
-                            tf.cast(test_label, tf.float32),
-                            tf.matmul(
-                                tf.transpose(w),
-                                test_dense_x
-                            )
-                        )
-                    )
-                ), tf.float32))
-        sign_actual = tf.cast(tf.sign(tf.matmul(tf.transpose(w), test_dense_x)[0][0]), tf.int64)
+        # test_dense_x = get_dense_x(test_index, test_value)
+        test_w_filtered = tf.gather(w, test_index.values)
+        test_x_filtered = tf.convert_to_tensor(test_value.values, dtype=tf.float32)
+        test_x_filtered = tf.reshape(test_x_filtered, [tf.shape(test_value)[0], 1])
+        sign_actual = tf.cast(tf.sign(tf.matmul(tf.transpose(test_w_filtered), test_x_filtered)[0][0]), tf.int64)
         sign_expected = tf.sign(test_label[0])
         sign_values = [sign_actual, sign_expected]
 
