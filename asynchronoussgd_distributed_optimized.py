@@ -1,7 +1,8 @@
 import tensorflow as tf
 import time
 
-
+tf.app.flags.DEFINE_integer("task_index", 0, "Index of the worker task")
+FLAGS = tf.app.flags.FLAGS
 # Number of features
 num_features = 33762578
 
@@ -53,38 +54,34 @@ with g.as_default():
 
     # Compute the gradient
     # dense_x = {}
-    for i in range(0, 5):
-        with tf.device("/job:worker/task:%d" % i):
-            label, index, value = get_next_row(file_names[str(i)])
-            w_filtered = tf.gather(w, index.values)
-            x_filtered = tf.convert_to_tensor(value.values, dtype=tf.float32)
-            x_filtered = tf.reshape(x_filtered, [tf.shape(value)[0], 1])
-            l_filtered = label
-            local_gradient = tf.mul(
-                    tf.mul(
-                        tf.cast(l_filtered, tf.float32),
-                        (tf.sigmoid(
-                            tf.mul(
-                                tf.cast(l_filtered, tf.float32),
-                                tf.matmul(
-                                    tf.transpose(w_filtered),
-                                    x_filtered
-                                )
+    with tf.device("/job:worker/task:%d" % FLAGS.task_index):
+        label, index, value = get_next_row(file_names[str(FLAGS.task_index)])
+        w_filtered = tf.gather(w, index.values)
+        x_filtered = tf.convert_to_tensor(value.values, dtype=tf.float32)
+        x_filtered = tf.reshape(x_filtered, [tf.shape(value)[0], 1])
+        l_filtered = label
+        local_gradient = tf.mul(
+                tf.mul(
+                    tf.cast(l_filtered, tf.float32),
+                    (tf.sigmoid(
+                        tf.mul(
+                            tf.cast(l_filtered, tf.float32),
+                            tf.matmul(
+                                tf.transpose(w_filtered),
+                                x_filtered
                             )
-                        ) - 1)
-                    ), x_filtered)
-            local_gradient = tf.reshape(local_gradient, tf.shape(value))
-            local_gradient = tf.mul(local_gradient, -0.01)
-            payload = [local_gradient, index]
+                        )
+                    ) - 1)
+                ), x_filtered)
+        local_gradient = tf.reshape(local_gradient, tf.shape(value))
 
     # we create an operator to aggregate the local gradients
     with tf.device("/job:worker/task:0"):
-        gradient = payload[0]
-        dense_gradient = tf.sparse_to_dense(tf.sparse_tensor_to_dense(payload[1]),
+        dense_gradient = tf.sparse_to_dense(tf.sparse_tensor_to_dense(index),
             [num_features],
-            gradient)
+            local_gradient)
         dense_gradient = tf.reshape(dense_gradient, [num_features, 1])
-        assign_op = tf.assign_add(w, dense_gradient)
+        assign_op = w.assign_add(tf.mul(dense_gradient, -0.01))
         test_label, test_index, test_value = get_next_row(test_file_names)
         # test_dense_x = get_dense_x(test_index, test_value)
         test_w_filtered = tf.gather(w, test_index.values)
@@ -95,20 +92,22 @@ with g.as_default():
         sign_values = [sign_actual, sign_expected]
 
     # Create a session
-    with tf.Session("grpc://vm-8-1:2222") as sess:
-        sess.run(tf.initialize_all_variables())
-        # Start the queue readers
-        tf.train.start_queue_runners(sess=sess)
+    with tf.Session("grpc://vm-8-%d:2222" % (FLAGS.task_index+1)) as sess:
+         # only one client initializes the variable
+        if FLAGS.task_index == 0:
+            sess.run(tf.initialize_all_variables())
+            # Start the queue readers
+            tf.train.start_queue_runners(sess=sess)
         # Run n iterations
-        n = 500
+        n = 100
         e = 200
         count = 0
         start_total = time.time()
         for i in range(0, n):
             start = time.time()
             output = sess.run(assign_op)
-            print "Time taken for training iteration " + str(i) + ": " + str(time.time() - start)
-            if i % 10 == 0:
+            print "Time taken for training iteration " + str(i) + " at : vm-" + FLAGS.task_index+1 + " : " + str(time.time() - start)
+            if FLAGS.task_index == 0 and i % 10 == 0:
                 start = time.time()
                 count = 0
                 for j in range(0,e):
@@ -118,5 +117,5 @@ with g.as_default():
                 print "*********Mistakes: " + str(count), str(e) + "**********"
                 # loss_out = sess.run(loss)
                 print "Time in calculating mistakes on test set: " + str(time.time() - start)
-        print "Total time taken for " + str(n) + " iterations : " + str(time.time() - start_total)
+        print "Total time taken for " + str(n) + " iterations : " + " at : vm-" + FLAGS.task_index+1 + " : " + str(time.time() - start_total)
         sess.close()
