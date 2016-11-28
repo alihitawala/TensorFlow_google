@@ -84,6 +84,7 @@ with g.as_default():
             dense_gradient = tf.sparse_to_dense(tf.sparse_tensor_to_dense(g[2]),
                 [num_features],
                 gradient)
+            dense_gradient = tf.reshape(dense_gradient, [num_features, 1])
             dense_gradients.append(dense_gradient)
         aggregator = tf.add_n(dense_gradients)
         assign_op = tf.assign_add(w, tf.mul(aggregator, -0.01))
