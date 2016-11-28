@@ -68,7 +68,7 @@ with g.as_default():
                             tf.mul(
                                 tf.cast(l_filtered, tf.float32),
                                 tf.matmul(
-                                    tf.transpose(w),
+                                    tf.transpose(w_filtered),
                                     x_filtered
                                 )
                             )
