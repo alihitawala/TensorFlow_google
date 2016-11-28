@@ -112,7 +112,7 @@ with g.as_default():
         e = 200
         count = 0
         for i in range(0, n):
-            start = time.time();
+            start = time.time()
             output = sess.run(assign_op)
             print "Time taken for training iteration " + str(i) + ": " + str(time.time() - start)
             print "============================================="
