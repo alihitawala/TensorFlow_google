@@ -106,14 +106,14 @@ with g.as_default():
         # Start the queue readers
         tf.train.start_queue_runners(sess=sess)
         # Run n iterations
-        n = 2000
+        n = 500
         e = 200
         count = 0
+        start_total = time.time()
         for i in range(0, n):
             start = time.time()
             output = sess.run(assign_op)
             print "Time taken for training iteration " + str(i) + ": " + str(time.time() - start)
-            print "============================================="
             if i % 10 == 0:
                 start = time.time()
                 count = 0
@@ -121,9 +121,8 @@ with g.as_default():
                     output_sign = sess.run(sign_values)
                     if output_sign[0] != output_sign[1]:
                         count+=1
-                print "-------------------------------------------------"
                 print "*********Mistakes: " + str(count), str(e) + "**********"
                 # loss_out = sess.run(loss)
                 print "Time in calculating mistakes on test set: " + str(time.time() - start)
-                print "-------------------------------------------------"
+        print "Total time taken for " + str(n) + " iterations : " + str(time.time() - start_total)
         sess.close()
