@@ -97,7 +97,7 @@ with g.as_default():
         if FLAGS.task_index == 0:
             sess.run(tf.initialize_all_variables())
             # Start the queue readers
-            tf.train.start_queue_runners(sess=sess)
+        tf.train.start_queue_runners(sess=sess)
         # Run n iterations
         n = 100
         e = 200
