@@ -97,25 +97,38 @@ with g.as_default():
         if FLAGS.task_index == 0:
             sess.run(tf.initialize_all_variables())
             # Start the queue readers
-        tf.train.start_queue_runners(sess=sess)
+        # Start input enqueue threads.
+        coord = tf.train.Coordinator()
+        # Start the queue readers
+        threads = tf.train.start_queue_runners(sess=sess, coord=coord)
         # Run n iterations
         n = 100
         e = 200
         count = 0
-        start_total = time.time()
-        for i in range(0, n):
-            start = time.time()
-            output = sess.run(assign_op)
-            print "Time taken for training iteration " + str(i) + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start)
-            if FLAGS.task_index == 0 and i % 10 == 0:
+        try:
+            start_total = time.time()
+            # while not coord.should_stop():
+            # Run training steps or whatever
+            for i in range(0, n):
                 start = time.time()
-                count = 0
-                for j in range(0,e):
-                    output_sign = sess.run(sign_values)
-                    if output_sign[0] != output_sign[1]:
-                        count+=1
-                print "*********Mistakes: " + str(count), str(e) + "**********"
-                # loss_out = sess.run(loss)
-                print "Time in calculating mistakes on test set: " + str(time.time() - start)
-        print "Total time taken for " + str(n) + " iterations : " + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start_total)
+                output = sess.run(assign_op)
+                print "Time taken for training iteration " + str(i) + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start)
+                if FLAGS.task_index == 0 and i % 10 == 0:
+                    start = time.time()
+                    count = 0
+                    for j in range(0,e):
+                        output_sign = sess.run(sign_values)
+                        if output_sign[0] != output_sign[1]:
+                            count+=1
+                    print "*********Mistakes: " + str(count), str(e) + "**********"
+                    # loss_out = sess.run(loss)
+                    print "Time in calculating mistakes on test set: " + str(time.time() - start)
+            print "Total time taken for " + str(n) + " iterations : " + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start_total)
+        except tf.errors.OutOfRangeError:
+            print('Done training -- epoch limit reached')
+        finally:  # When done, ask the threads to stop.
+            coord.request_stop()
+
+        # Wait for threads to finish.
+        coord.join(threads)
         sess.close()
