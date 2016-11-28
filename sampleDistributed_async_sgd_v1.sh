@@ -9,4 +9,3 @@ nohup python asynchronoussgd_distributed_optimized.py --task_index=2 > asynclog-
 nohup python asynchronoussgd_distributed_optimized.py --task_index=3 > asynclog-3.out 2>&1&
 nohup python asynchronoussgd_distributed_optimized.py --task_index=4 > asynclog-4.out 2>&1&
 # defined in tfdefs.sh to terminate the cluster
-terminate_cluster
