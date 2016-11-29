@@ -49,7 +49,7 @@ tf.set_random_seed(1024)
 with g.as_default():
     # Create a model
     with tf.device("/job:worker/task:0"):
-        w = tf.Variable(tf.random_uniform([num_features, 1]), name="model")
+        w = tf.Variable(tf.random_uniform([num_features, 1], -1, 1), name="model")
 
     # Compute the gradient
     gradients = []
@@ -105,12 +105,13 @@ with g.as_default():
         tf.train.start_queue_runners(sess=sess)
         # Run n iterations
         n = 500
-        e = 200
+        e = 2000
         count = 0
         start_total = time.time()
         for i in range(0, n):
             start = time.time()
-            output = sess.run(assign_op)
+            output = sess.run([assign_op, gradients])
+            print len(output[1])
             print "Time taken for training iteration " + str(i) + ": " + str(time.time() - start)
             if i % 10 == 0:
                 start = time.time()
