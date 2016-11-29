@@ -50,6 +50,8 @@ with g.as_default():
     # Create a model
     with tf.device("/job:worker/task:0"):
         w = tf.Variable(tf.random_uniform([num_features, 1], -1, 1), name="model")
+        def filtered_w(index):
+            return tf.gather(w, index)
 
     # Compute the gradient
     gradients = []
@@ -57,7 +59,7 @@ with g.as_default():
     for i in range(0, 5):
         with tf.device("/job:worker/task:%d" % i):
             label, index, value = get_next_row(file_names[str(i)])
-            w_filtered = tf.gather(w, index.values)
+            w_filtered = filtered_w(index.values)
             x_filtered = tf.reshape(tf.convert_to_tensor(value.values, dtype=tf.float32), [tf.shape(value)[0], 1])
             l_filtered = label
             local_gradient = tf.mul(
@@ -80,15 +82,15 @@ with g.as_default():
     with tf.device("/job:worker/task:0"):
         dense_gradients = []
         for g in gradients:
-            tf.scatter_add(w, g[1].values, g[0])
-            # dense_gradient = tf.sparse_to_dense(tf.sparse_tensor_to_dense(g[1]),
-            #     [num_features],
-            #     gradient)
-            # dense_gradient = tf.reshape(dense_gradient, [num_features, 1])
-            # dense_gradients.append(dense_gradient)
+            # tf.scatter_add(w, g[1].values, g[0])
+            dense_gradient = tf.sparse_to_dense(tf.sparse_tensor_to_dense(g[1]),
+                [num_features],
+                g[0])
+            dense_gradient = tf.reshape(dense_gradient, [num_features, 1])
+            dense_gradients.append(dense_gradient)
         # dense_gradients.append(w)
-        # aggregator = tf.add_n(dense_gradients)
-        assign_op = tf.assign(w, w)
+        aggregator = tf.add_n(dense_gradients)
+        assign_op = tf.assign_add(w, aggregator)
         test_label, test_index, test_value = get_next_row(test_file_names)
         # test_dense_x = get_dense_x(test_index, test_value)
         test_w_filtered = tf.gather(w, test_index.values)
