@@ -54,7 +54,8 @@ tf.set_random_seed(1024)
 with g.as_default():
     # Create a model
     with tf.device("/job:worker/task:0"):
-        w = tf.Variable(tf.random_uniform([num_features, 1], -1, 1), name="model")
+        # w = tf.Variable(tf.random_uniform([num_features, 1], -1, 1), name="model")
+        w = tf.Variable(tf.zeros([num_features, 1]), name="model")
         def filtered_w(index):
             return tf.gather(w, index)
 
