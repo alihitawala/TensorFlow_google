@@ -31,7 +31,7 @@ def get_dense_x(index, value):
             [num_features],
             tf.sparse_tensor_to_dense(value))
     return tf.reshape(dense_x, [num_features, 1])
-
+tf.set_random_seed(1024)
 with g.as_default():
     label, index, value = get_next_row(file_names)
 
@@ -43,7 +43,7 @@ with g.as_default():
     #
     # dense_x = tf.reshape(dense_x, [num_features, 1])
     # Create a model
-    w = tf.Variable(tf.zeros([num_features,1]), name="model")
+    w = tf.Variable(tf.random_uniform([num_features, 1], -1, 1), name="model")
     w_filtered = tf.gather(w, index.values)
     x_filtered = tf.reshape(tf.convert_to_tensor(value.values, dtype=tf.float32), [tf.shape(value)[0], 1])
     l_filtered = label
@@ -98,7 +98,7 @@ with g.as_default():
     tf.train.start_queue_runners(sess=sess)
 
     # Run n iterations
-    n = 1000
+    n = 10000
     e = 2000
     count = 0
     start_total = time.time()
