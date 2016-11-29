@@ -1,0 +1,13 @@
+Time taken for training iteration 0 at : vm-1 : 2.18815898895
+*********Mistakes: 152 200**********
+Time in calculating mistakes on test set: 0.382765054703
+Time taken for training iteration 1 at : vm-1 : 1.715269804
+Time taken for training iteration 2 at : vm-1 : 1.59836387634
+Time taken for training iteration 3 at : vm-1 : 1.58546495438
+Time taken for training iteration 4 at : vm-1 : 1.66082715988
+Time taken for training iteration 5 at : vm-1 : 1.55221986771
+Time taken for training iteration 6 at : vm-1 : 1.52170586586
+Time taken for training iteration 7 at : vm-1 : 1.72419381142
+Time taken for training iteration 8 at : vm-1 : 1.46425700188
+Time taken for training iteration 9 at : vm-1 : 1.43019986153
+Total time taken for 10 iterations :  at : vm-1 : 16.823718071
