@@ -75,7 +75,7 @@ with g.as_default():
                             )
                         ) - 1)
                     ), x_filtered)
-            local_gradient = tf.reshape(tf.mul(local_gradient, -0.01), shape=[tf.shape(value)[0], 1])
+            local_gradient = tf.reshape(tf.mul(local_gradient, -0.01), shape=tf.shape(value))
             gradients.append([local_gradient, index])
 
     # we create an operator to aggregate the local gradients
