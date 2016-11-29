@@ -129,7 +129,7 @@ with g.as_default():
             #                 count+=1
             #         print "*********Mistakes: " + str(count), str(e) + "**********"
             #         print "Time in calculating mistakes on test set: " + str(time.time() - start)
-            # print "Total time taken for " + str(n) + " iterations : " + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start_total)
+            print "Total time taken for " + str(n) + " iterations : " + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start_total)
         except tf.errors.OutOfRangeError:
             print('Done training -- epoch limit reached')
         finally:  # When done, ask the threads to stop.
