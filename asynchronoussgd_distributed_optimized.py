@@ -99,9 +99,9 @@ with g.as_default():
 
     # Create a session
     with tf.Session("grpc://vm-8-%d:2222" % (FLAGS.task_index+1)) as sess:
-         # only one client initializes the variable
-        # if FLAGS.task_index == 0:
-        sess.run(tf.initialize_all_variables())
+        # only one client initializes the variable
+        if FLAGS.task_index == 0:
+            sess.run(tf.initialize_all_variables())
         # Start the queue readers
         # Start input enqueue threads.
         coord = tf.train.Coordinator()
