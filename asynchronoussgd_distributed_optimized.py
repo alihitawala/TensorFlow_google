@@ -117,7 +117,7 @@ with g.as_default():
             # Run training steps or whatever
             for i in range(0, n):
                 start = time.time()
-                output = sess.run(assign_op)
+                sess.run(assign_op)
                 print "Time taken for training iteration " + str(i) + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start)
                 if FLAGS.task_index == 0 and i % 10 == 0:
                     start = time.time()
