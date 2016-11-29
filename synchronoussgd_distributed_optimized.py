@@ -91,7 +91,7 @@ with g.as_default():
         dense_gradients = []
         for g in gradients:
             gradient = g[0]
-            tf.scatter_add(w, g[1], g[0])
+            tf.scatter_add(w, g[1].values, g[0])
             # dense_gradient = tf.sparse_to_dense(tf.sparse_tensor_to_dense(g[1]),
             #     [num_features],
             #     gradient)
