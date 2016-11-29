@@ -83,6 +83,7 @@ with g.as_default():
                     ), x_filtered)
             local_gradient = tf.reshape(local_gradient, tf.shape(value))
             local_gradient = tf.mul(local_gradient, -0.01)
+            local_gradient = tf.reshape(local_gradient, [tf.shape(value)[0], 1])
             gradients.append([local_gradient, index])
 
     # we create an operator to aggregate the local gradients
@@ -90,14 +91,15 @@ with g.as_default():
         dense_gradients = []
         for g in gradients:
             gradient = g[0]
-            dense_gradient = tf.sparse_to_dense(tf.sparse_tensor_to_dense(g[1]),
-                [num_features],
-                gradient)
-            dense_gradient = tf.reshape(dense_gradient, [num_features, 1])
-            dense_gradients.append(dense_gradient)
-        dense_gradients.append(w)
-        aggregator = tf.add_n(dense_gradients)
-        assign_op = tf.assign(w, aggregator)
+            tf.scatter_add(w, g[1], g[0])
+            # dense_gradient = tf.sparse_to_dense(tf.sparse_tensor_to_dense(g[1]),
+            #     [num_features],
+            #     gradient)
+            # dense_gradient = tf.reshape(dense_gradient, [num_features, 1])
+            # dense_gradients.append(dense_gradient)
+        # dense_gradients.append(w)
+        # aggregator = tf.add_n(dense_gradients)
+        assign_op = tf.assign(w, w)
         test_label, test_index, test_value = get_next_row(test_file_names)
         # test_dense_x = get_dense_x(test_index, test_value)
         test_w_filtered = tf.gather(w, test_index.values)
