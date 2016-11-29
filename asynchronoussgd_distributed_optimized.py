@@ -10,15 +10,20 @@ g = tf.Graph()
 
 # Get the list of all files in the input data directory
 data_dir = "./data/criteo-tfr-big"
+# file_names = {
+#     '0': [data_dir + '/tfrecords00', data_dir + '/tfrecords01', data_dir + '/tfrecords02', data_dir + '/tfrecords03',
+#           data_dir + '/tfrecords04'],
+#     '1': [data_dir + '/tfrecords05', data_dir + '/tfrecords06', data_dir + '/tfrecords07', data_dir + '/tfrecords08',
+#           data_dir + '/tfrecords09'],
+#     '2': [data_dir + '/tfrecords10', data_dir + '/tfrecords11', data_dir + '/tfrecords12', data_dir + '/tfrecords13',
+#           data_dir + '/tfrecords14'],
+#     '3': [data_dir + '/tfrecords15', data_dir + '/tfrecords16', data_dir + '/tfrecords17', data_dir + '/tfrecords18',
+#           data_dir + '/tfrecords19'], '4': [data_dir + '/tfrecords20', data_dir + '/tfrecords21']}
 file_names = {
-    '0': [data_dir + '/tfrecords00', data_dir + '/tfrecords01', data_dir + '/tfrecords02', data_dir + '/tfrecords03',
-          data_dir + '/tfrecords04'],
-    '1': [data_dir + '/tfrecords05', data_dir + '/tfrecords06', data_dir + '/tfrecords07', data_dir + '/tfrecords08',
-          data_dir + '/tfrecords09'],
-    '2': [data_dir + '/tfrecords10', data_dir + '/tfrecords11', data_dir + '/tfrecords12', data_dir + '/tfrecords13',
-          data_dir + '/tfrecords14'],
-    '3': [data_dir + '/tfrecords15', data_dir + '/tfrecords16', data_dir + '/tfrecords17', data_dir + '/tfrecords18',
-          data_dir + '/tfrecords19'], '4': [data_dir + '/tfrecords20', data_dir + '/tfrecords21']}
+    '0': [data_dir + '/tfrecords00'],
+    '1': [data_dir + '/tfrecords05'],
+    '2': [data_dir + '/tfrecords10'],
+    '3': [data_dir + '/tfrecords15'], '4': [data_dir + '/tfrecords20']}
 test_file_names = [data_dir + '/tfrecords22']
 
 
@@ -73,15 +78,16 @@ with g.as_default():
                         )
                     ) - 1)
                 ), x_filtered)
-        local_gradient = tf.reshape(local_gradient, tf.shape(value))
+        local_gradient = tf.reshape(tf.mul(tf.reshape(local_gradient, tf.shape(value)), -0.01), [tf.shape(value)[0], 1])
 
     # we create an operator to aggregate the local gradients
     with tf.device("/job:worker/task:0"):
-        dense_gradient = tf.sparse_to_dense(tf.sparse_tensor_to_dense(index),
-            [num_features],
-            local_gradient)
-        dense_gradient = tf.reshape(dense_gradient, [num_features, 1])
-        assign_op = w.assign_add(tf.mul(dense_gradient, -0.01))
+        assign_op = tf.scatter_add(w, index.values, local_gradient)
+        # dense_gradient = tf.sparse_to_dense(tf.sparse_tensor_to_dense(index),
+        #     [num_features],
+        #     local_gradient)
+        # dense_gradient = tf.reshape(dense_gradient, [num_features, 1])
+        # assign_op = w.assign_add(tf.mul(dense_gradient, -0.01))
         test_label, test_index, test_value = get_next_row(test_file_names)
         # test_dense_x = get_dense_x(test_index, test_value)
         test_w_filtered = tf.gather(w, test_index.values)
@@ -121,7 +127,6 @@ with g.as_default():
                         if output_sign[0] != output_sign[1]:
                             count+=1
                     print "*********Mistakes: " + str(count), str(e) + "**********"
-                    # loss_out = sess.run(loss)
                     print "Time in calculating mistakes on test set: " + str(time.time() - start)
             print "Total time taken for " + str(n) + " iterations : " + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start_total)
         except tf.errors.OutOfRangeError:
