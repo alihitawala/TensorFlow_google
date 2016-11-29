@@ -107,7 +107,8 @@ with g.as_default():
         #                         gradients[2][1].values, gradients[2][0]),
         #                     gradients[3][1].values, gradients[3][0]),
         #                 gradients[4][1].values, gradients[4][0])
-        assign_op = tf.scatter_add(w, add_g.indices, add_g.values)
+        index_total = tf.reshape(add_g.indices, shape=tf.shape(add_g.values))
+        assign_op = tf.scatter_add(w, index_total, add_g.values)
         test_label, test_index, test_value = get_next_row(test_file_names)
         # test_dense_x = get_dense_x(test_index, test_value)
         test_w_filtered = tf.gather(w, test_index.values)
