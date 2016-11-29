@@ -98,7 +98,7 @@ with g.as_default():
     tf.train.start_queue_runners(sess=sess)
 
     # Run n iterations
-    n = 10000
+    n = 100
     e = 2000
     count = 0
     start_total = time.time()
@@ -109,14 +109,14 @@ with g.as_default():
         # print (output_g)
         # print (output_g.indices)
         # print (output_g)
-        if i % 100 == 0 :
-            start = time.time()
-            count = 0
-            for j in range(0,e):
-                output_sign = sess.run(sign_values)
-                if output_sign[0] != output_sign[1]:
-                    count+=1
-            print "*********Mistakes: " + str(count), str(e) + "**********"
-            # loss_out = sess.run(loss)
-            print "Time in calculating mistakes on test set: " + str(time.time() - start)
+        # if i % 100 == 0 :
+        #     start = time.time()
+        #     count = 0
+        #     for j in range(0,e):
+        #         output_sign = sess.run(sign_values)
+        #         if output_sign[0] != output_sign[1]:
+        #             count+=1
+        #     print "*********Mistakes: " + str(count), str(e) + "**********"
+        #     # loss_out = sess.run(loss)
+        #     print "Time in calculating mistakes on test set: " + str(time.time() - start)
     print "Time taken for " + str(n) + " iteration :: " + str(time.time() - start_total)
