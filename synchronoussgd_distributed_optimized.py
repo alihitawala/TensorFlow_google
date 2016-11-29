@@ -56,8 +56,6 @@ with g.as_default():
     with tf.device("/job:worker/task:0"):
         # w = tf.Variable(tf.random_uniform([num_features, 1], -1, 1), name="model")
         w = tf.Variable(tf.zeros([num_features, 1]), name="model")
-        def filtered_w(index):
-            return tf.gather(w, index)
 
     # Compute the gradient
     gradients = []
@@ -65,7 +63,7 @@ with g.as_default():
     for i in range(0, 5):
         with tf.device("/job:worker/task:%d" % i):
             label, index, value = get_next_row(file_names[str(i)])
-            w_filtered = filtered_w(index.values)
+            w_filtered = tf.gather(w, index.values)
             x_filtered = tf.reshape(tf.convert_to_tensor(value.values, dtype=tf.float32), [tf.shape(value)[0], 1])
             l_filtered = label
             local_gradient = tf.mul(
@@ -90,7 +88,6 @@ with g.as_default():
     with tf.device("/job:worker/task:0"):
         dense_gradients = []
         for g in gradients:
-            gradient = g[0]
             tf.scatter_add(w, g[1].values, g[0])
             # dense_gradient = tf.sparse_to_dense(tf.sparse_tensor_to_dense(g[1]),
             #     [num_features],
