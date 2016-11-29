@@ -90,14 +90,15 @@ with g.as_default():
         #     local_gradient)
         # dense_gradient = tf.reshape(dense_gradient, [num_features, 1])
         # assign_op = w.assign_add(tf.mul(dense_gradient, -0.01))
-        test_label, test_index, test_value = get_next_row(test_file_names)
+        # test_label, test_index, test_value = get_next_row(test_file_names)
         # test_dense_x = get_dense_x(test_index, test_value)
-        test_w_filtered = tf.gather(w, test_index.values)
-        test_x_filtered = tf.convert_to_tensor(test_value.values, dtype=tf.float32)
-        test_x_filtered = tf.reshape(test_x_filtered, [tf.shape(test_value)[0], 1])
-        sign_actual = tf.cast(tf.sign(tf.matmul(tf.transpose(test_w_filtered), test_x_filtered)[0][0]), tf.int64)
-        sign_expected = tf.sign(test_label[0])
-        sign_values = [sign_actual, sign_expected]
+
+        # test_w_filtered = tf.gather(w, test_index.values)
+        # test_x_filtered = tf.convert_to_tensor(test_value.values, dtype=tf.float32)
+        # test_x_filtered = tf.reshape(test_x_filtered, [tf.shape(test_value)[0], 1])
+        # sign_actual = tf.cast(tf.sign(tf.matmul(tf.transpose(test_w_filtered), test_x_filtered)[0][0]), tf.int64)
+        # sign_expected = tf.sign(test_label[0])
+        # sign_values = [sign_actual, sign_expected]
 
     # Create a session
     with tf.Session("grpc://vm-8-%d:2222" % (FLAGS.task_index+1)) as sess:
@@ -120,17 +121,17 @@ with g.as_default():
             for i in range(0, n):
                 start = time.time()
                 sess.run(assign_op)
-                print "Time taken for training iteration " + str(i) + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start)
-                if FLAGS.task_index == 0 and i % 10 == 0:
-                    start = time.time()
-                    count = 0
-                    for j in range(0,e):
-                        output_sign = sess.run(sign_values)
-                        if output_sign[0] != output_sign[1]:
-                            count+=1
-                    print "*********Mistakes: " + str(count), str(e) + "**********"
-                    print "Time in calculating mistakes on test set: " + str(time.time() - start)
-            print "Total time taken for " + str(n) + " iterations : " + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start_total)
+            #     print "Time taken for training iteration " + str(i) + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start)
+            #     if FLAGS.task_index == 0 and i % 10 == 0:
+            #         start = time.time()
+            #         count = 0
+            #         for j in range(0,e):
+            #             output_sign = sess.run(sign_values)
+            #             if output_sign[0] != output_sign[1]:
+            #                 count+=1
+            #         print "*********Mistakes: " + str(count), str(e) + "**********"
+            #         print "Time in calculating mistakes on test set: " + str(time.time() - start)
+            # print "Total time taken for " + str(n) + " iterations : " + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start_total)
         except tf.errors.OutOfRangeError:
             print('Done training -- epoch limit reached')
         finally:  # When done, ask the threads to stop.
