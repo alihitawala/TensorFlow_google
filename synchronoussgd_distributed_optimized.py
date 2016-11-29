@@ -96,11 +96,16 @@ with g.as_default():
             # dense_gradients.append(dense_gradient)
         # dense_gradients.append(w)
         # aggregator = tf.add_n(dense_gradients)
-        assign_op = tf.scatter_add(w, gradients[0][1].values, gradients[0][0]).\
-            tf.scatter_add(w, gradients[1][1].values, gradients[1][0]).\
-            tf.scatter_add(w, gradients[2][1].values, gradients[2][0]).\
-            tf.scatter_add(w, gradients[3][1].values, gradients[3][0]).\
-            tf.scatter_add(w, gradients[4][1].values, gradients[4][0])
+        assign_op = tf.scatter_add(
+                        tf.scatter_add(
+                            tf.scatter_add(
+                                tf.scatter_add(
+                                    tf.scatter_add(w, gradients[0][1].values, gradients[0][0]),
+                                    gradients[1][1].values, gradients[1][0]),
+                                gradients[2][1].values, gradients[2][0]),
+                            gradients[3][1].values, gradients[3][0]),
+                        gradients[4][1].values, gradients[4][0])
+
         test_label, test_index, test_value = get_next_row(test_file_names)
         # test_dense_x = get_dense_x(test_index, test_value)
         test_w_filtered = tf.gather(w, test_index.values)
