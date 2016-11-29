@@ -56,12 +56,14 @@ with g.as_default():
     # Create a model
     with tf.device("/job:worker/task:0"):
         w = tf.Variable(tf.random_uniform([num_features, 1]), name="model")
+        def get_filtered_w(index):
+            return tf.gather(w, index)
 
     # Compute the gradient
     # dense_x = {}
     with tf.device("/job:worker/task:%d" % FLAGS.task_index):
         label, index, value = get_next_row(file_names[str(FLAGS.task_index)])
-        w_filtered = tf.gather(w, index.values)
+        w_filtered = get_filtered_w(index.values)
         x_filtered = tf.convert_to_tensor(value.values, dtype=tf.float32)
         x_filtered = tf.reshape(x_filtered, [tf.shape(value)[0], 1])
         l_filtered = label
