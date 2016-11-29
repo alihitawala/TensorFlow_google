@@ -86,6 +86,7 @@ with g.as_default():
             # local_gradient =
             # local_gradient =
             local_gradient = tf.reshape(tf.mul(tf.reshape(local_gradient, tf.shape(value)), -0.01), [tf.shape(value)[0], 1])
+            shape_lg = tf.shape(local_gradient)
             gradients.append([local_gradient, index])
 
     # we create an operator to aggregate the local gradients
@@ -131,7 +132,8 @@ with g.as_default():
         start_total = time.time()
         for i in range(0, n):
             start = time.time()
-            output = sess.run(local_gradient)
+            output = sess.run(shape_lg)
+            print output
 #            print len(output[1])
             print "Time taken for training iteration " + str(i) + ": " + str(time.time() - start)
             if i % 10 == 0:
