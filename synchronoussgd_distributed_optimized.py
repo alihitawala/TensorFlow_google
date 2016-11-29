@@ -9,15 +9,20 @@ g = tf.Graph()
 
 # Get the list of all files in the input data directory
 data_dir = "./data/criteo-tfr-big"
+# file_names = {
+#     '0': [data_dir + '/tfrecords00', data_dir + '/tfrecords01', data_dir + '/tfrecords02', data_dir + '/tfrecords03',
+#           data_dir + '/tfrecords04'],
+#     '1': [data_dir + '/tfrecords05', data_dir + '/tfrecords06', data_dir + '/tfrecords07', data_dir + '/tfrecords08',
+#           data_dir + '/tfrecords09'],
+#     '2': [data_dir + '/tfrecords10', data_dir + '/tfrecords11', data_dir + '/tfrecords12', data_dir + '/tfrecords13',
+#           data_dir + '/tfrecords14'],
+#     '3': [data_dir + '/tfrecords15', data_dir + '/tfrecords16', data_dir + '/tfrecords17', data_dir + '/tfrecords18',
+#           data_dir + '/tfrecords19'], '4': [data_dir + '/tfrecords20', data_dir + '/tfrecords21']}
 file_names = {
-    '0': [data_dir + '/tfrecords00', data_dir + '/tfrecords01', data_dir + '/tfrecords02', data_dir + '/tfrecords03',
-          data_dir + '/tfrecords04'],
-    '1': [data_dir + '/tfrecords05', data_dir + '/tfrecords06', data_dir + '/tfrecords07', data_dir + '/tfrecords08',
-          data_dir + '/tfrecords09'],
-    '2': [data_dir + '/tfrecords10', data_dir + '/tfrecords11', data_dir + '/tfrecords12', data_dir + '/tfrecords13',
-          data_dir + '/tfrecords14'],
-    '3': [data_dir + '/tfrecords15', data_dir + '/tfrecords16', data_dir + '/tfrecords17', data_dir + '/tfrecords18',
-          data_dir + '/tfrecords19'], '4': [data_dir + '/tfrecords20', data_dir + '/tfrecords21']}
+    '0': [data_dir + '/tfrecords00'],
+    '1': [data_dir + '/tfrecords05'],
+    '2': [data_dir + '/tfrecords10'],
+    '3': [data_dir + '/tfrecords15'], '4': [data_dir + '/tfrecords20']}
 test_file_names = [data_dir + '/tfrecords22']
 
 
