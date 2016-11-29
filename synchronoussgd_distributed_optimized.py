@@ -83,23 +83,11 @@ with g.as_default():
                             )
                         ) - 1)
                     ), x_filtered)
-            # local_gradient =
-            # local_gradient =
             local_gradient = tf.reshape(tf.mul(tf.reshape(local_gradient, tf.shape(value)), -0.01), [tf.shape(value)[0], 1])
             gradients.append([local_gradient, index])
 
     # we create an operator to aggregate the local gradients
     with tf.device("/job:worker/task:0"):
-        # dense_gradients = []
-        # for g in gradients:
-        #     tf.scatter_add(w, g[1].values, g[0])
-            # dense_gradient = tf.sparse_to_dense(tf.sparse_tensor_to_dense(g[1]),
-            #     [num_features],
-            #     gradient)
-            # dense_gradient = tf.reshape(dense_gradient, [num_features, 1])
-            # dense_gradients.append(dense_gradient)
-        # dense_gradients.append(w)
-        # aggregator = tf.add_n(dense_gradients)
         assign_op = tf.scatter_add(
                         tf.scatter_add(
                             tf.scatter_add(
@@ -125,7 +113,7 @@ with g.as_default():
         # Start the queue readers
         tf.train.start_queue_runners(sess=sess)
         # Run n iterations
-        n = 10000
+        n = 10
         e = 2000
         count = 0
         start_total = time.time()
@@ -134,15 +122,15 @@ with g.as_default():
             output = sess.run(assign_op)
 #            print len(output[1])
             print "Time taken for training iteration " + str(i) + ": " + str(time.time() - start)
-            if i % 10 == 0:
-                start = time.time()
-                count = 0
-                for j in range(0,e):
-                    output_sign = sess.run(sign_values)
-                    if output_sign[0] != output_sign[1]:
-                        count+=1
-                print "*********Mistakes: " + str(count), str(e) + "**********"
-                # loss_out = sess.run(loss)
-                print "Time in calculating mistakes on test set: " + str(time.time() - start)
+            # if i % 10 == 0:
+            #     start = time.time()
+            #     count = 0
+            #     for j in range(0,e):
+            #         output_sign = sess.run(sign_values)
+            #         if output_sign[0] != output_sign[1]:
+            #             count+=1
+            #     print "*********Mistakes: " + str(count), str(e) + "**********"
+            #     # loss_out = sess.run(loss)
+            #     print "Time in calculating mistakes on test set: " + str(time.time() - start)
         print "Total time taken for " + str(n) + " iterations : " + str(time.time() - start_total)
         sess.close()
