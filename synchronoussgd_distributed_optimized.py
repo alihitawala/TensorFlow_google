@@ -110,8 +110,8 @@ with g.as_default():
         start_total = time.time()
         for i in range(0, n):
             start = time.time()
-            output = sess.run([assign_op, gradients])
-            print len(output[1])
+            output = sess.run(assign_op)
+#            print len(output[1])
             print "Time taken for training iteration " + str(i) + ": " + str(time.time() - start)
             if i % 10 == 0:
                 start = time.time()
