@@ -78,7 +78,7 @@ with g.as_default():
     # dense_gradient = tf.reshape(dense_gradient, [num_features, 1])
     # x = tf.IndexedSlices(gradient, tf.sparse_tensor_to_dense(index) ,dense_shape=tf.constant([num_features, 1]))
     # rx = tf.rank(x)
-    update_model = tf.scatter_add(w, tf.sparse_tensor_to_dense(index), tf.reshape(tf.mul(gradient, -0.01), shape=[tf.shape(value)[0], 1]))
+    update_model = tf.scatter_add(w, index.values, tf.reshape(tf.mul(gradient, -0.01), shape=[tf.shape(value)[0], 1]))
 
 
     test_label, test_index, test_value = get_next_row(test_file_names)
@@ -99,17 +99,17 @@ with g.as_default():
 
     # Run n iterations
     n = 1000
-    e = 200
+    e = 2000
     count = 0
     start_total = time.time()
     for i in range(0, n):
         # start_time = time.time()
-        sess.run(update_model)
+        output_g = sess.run(update_model)
         # print "Time taken for 1 iteration :: " + str(i) + ' -- ' + str(time.time() - start_time)
         # print (output_g)
         # print (output_g.indices)
         # print (output_g)
-        if i % 100 == 0:
+        if i % 100 == 0 :
             start = time.time()
             count = 0
             for j in range(0,e):
