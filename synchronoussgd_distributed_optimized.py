@@ -59,7 +59,7 @@ with g.as_default():
 
 
         def get_filtered_w(index):
-            return tf.gather(w, index.values)
+            return tf.gather(w, index)
 
     # Compute the gradient
     gradients = []
