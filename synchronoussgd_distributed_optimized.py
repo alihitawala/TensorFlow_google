@@ -82,7 +82,7 @@ with g.as_default():
                             )
                         ) - 1)
                     ), x_filtered)
-            local_gradient = tf.mul(tf.reshape(local_gradient, tf.shape(value)), -0.01), [tf.shape(value)[0], 1]
+            local_gradient = tf.mul(tf.reshape(local_gradient, tf.shape(value)), -0.01)
             index_mod = tf.reshape(index.values, shape=[tf.shape(value)[0], 1])
             sparse_g = tf.SparseTensor(indices=index_mod, values=local_gradient, shape=[num_features])
             gradients.append([sparse_g])
