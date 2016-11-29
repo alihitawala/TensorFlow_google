@@ -53,17 +53,18 @@ def get_dense_x(index, value):
 tf.set_random_seed(1024)
 
 with g.as_default():
+    index_array = []
     # Create a model
     with tf.device("/job:worker/task:0"):
         w = tf.Variable(tf.random_uniform([num_features, 1]), name="model")
-        def get_filtered_w(index):
-            return tf.gather(w, index)
+        w_filtered = tf.gather(w, index_array[0])
 
     # Compute the gradient
     # dense_x = {}
     with tf.device("/job:worker/task:%d" % FLAGS.task_index):
         label, index, value = get_next_row(file_names[str(FLAGS.task_index)])
-        w_filtered = get_filtered_w(index.values)
+        index_array[0] = index.values
+        # w_filtered = w_f
         x_filtered = tf.reshape(tf.convert_to_tensor(value.values, dtype=tf.float32), [tf.shape(value)[0], 1])
         l_filtered = label
         local_gradient = tf.mul(
