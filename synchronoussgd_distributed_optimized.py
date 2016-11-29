@@ -82,21 +82,32 @@ with g.as_default():
                             )
                         ) - 1)
                     ), x_filtered)
-            local_gradient = tf.reshape(tf.mul(tf.reshape(local_gradient, tf.shape(value)), -0.01), [tf.shape(value)[0], 1])
-            gradients.append([local_gradient, index])
+            local_gradient = tf.mul(tf.reshape(local_gradient, tf.shape(value)), -0.01), [tf.shape(value)[0], 1]
+            index_mod = tf.reshape(index.values, shape=[tf.shape(value)[0], 1])
+            sparse_g = tf.SparseTensor(indices=index_mod, values=local_gradient, shape=[num_features])
+            gradients.append([sparse_g])
 
     # we create an operator to aggregate the local gradients
     with tf.device("/job:worker/task:0"):
-        assign_op = tf.scatter_add(
-                        tf.scatter_add(
-                            tf.scatter_add(
-                                tf.scatter_add(
-                                    tf.scatter_add(w, gradients[0][1].values, gradients[0][0]),
-                                    gradients[1][1].values, gradients[1][0]),
-                                gradients[2][1].values, gradients[2][0]),
-                            gradients[3][1].values, gradients[3][0]),
-                        gradients[4][1].values, gradients[4][0])
-
+        # sparse_0 = tf.SparseTensor(indices=gradients[0][1].values, values=gradients[0][0], shape=[num_features, 1])
+        add_g = tf.sparse_add(
+                    tf.sparse_add(
+                        tf.sparse_add(
+                            tf.sparse_add(
+                                gradients[0], gradients[1]
+                            ), gradients[2]),
+                        gradients[3]),
+                    gradients[4])
+        # assign_op = tf.scatter_add(
+        #                 tf.scatter_add(
+        #                     tf.scatter_add(
+        #                         tf.scatter_add(
+        #                             tf.scatter_add(w, gradients[0][1].values, gradients[0][0]),
+        #                             gradients[1][1].values, gradients[1][0]),
+        #                         gradients[2][1].values, gradients[2][0]),
+        #                     gradients[3][1].values, gradients[3][0]),
+        #                 gradients[4][1].values, gradients[4][0])
+        assign_op = tf.scatter_add(w, add_g.indices, add_g.values)
         test_label, test_index, test_value = get_next_row(test_file_names)
         # test_dense_x = get_dense_x(test_index, test_value)
         test_w_filtered = tf.gather(w, test_index.values)
@@ -112,14 +123,14 @@ with g.as_default():
         # Start the queue readers
         tf.train.start_queue_runners(sess=sess)
         # Run n iterations
-        n = 10
+        n = 1
         e = 2000
         count = 0
         start_total = time.time()
         for i in range(0, n):
             start = time.time()
             output = sess.run(assign_op)
-#            print len(output[1])
+            print len(output)
             print "Time taken for training iteration " + str(i) + ": " + str(time.time() - start)
             # if i % 10 == 0:
             #     start = time.time()
