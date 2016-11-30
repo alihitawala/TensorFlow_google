@@ -85,7 +85,7 @@ with g.as_default():
             gradients.append(tf.SparseTensor(
                     indices=tf.reshape(index.values, shape=[tf.shape(value)[0], 1]),
                     values=tf.mul(tf.reshape(local_gradient, tf.shape(value)), -0.01),
-                    shape=tf.cast(tf.shape(value), tf.int64)
+                    shape=[num_features]
                 )
             )
 
