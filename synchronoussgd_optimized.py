@@ -34,22 +34,12 @@ def get_dense_x(index, value):
 tf.set_random_seed(1024)
 with g.as_default():
     label, index, value = get_next_row(file_names)
-
-    # test = tf.gather_nd(params=value, indices=index)
-    # Convert to dense feature
-    # dense_x = tf.sparse_to_dense(tf.sparse_tensor_to_dense(index),
-    #         [num_features],
-    #         tf.sparse_tensor_to_dense(value))
-    #
-    # dense_x = tf.reshape(dense_x, [num_features, 1])
     # Create a model
-    w = tf.Variable(tf.random_uniform([num_features, 1], -1, 1), name="model")
+    w = tf.Variable(tf.ones([num_features, 1]), name="model")
     w_filtered = tf.gather(w, index.values)
     x_filtered = tf.reshape(tf.convert_to_tensor(value.values, dtype=tf.float32), [tf.shape(value)[0], 1])
     l_filtered = label
     # Compute the gradient
-    # gradient = tf.Variable(tf.ones([37, 1]), dtype=tf.float32)
-    # gradient = tf.mul(tf.mul(label, tf.sigmoid(tf.mul(label, tf.matmul(tf.transpose(w), dense_feature) - 1))), value)
     gradient = tf.mul(
                     tf.mul(
                         tf.cast(l_filtered, tf.float32),
@@ -65,19 +55,18 @@ with g.as_default():
                             )
                         ) - 1)
                     ), x_filtered)
-    # zero = tf.constant(0, dtype=tf.float32)
-    # where = tf.not_equal(gradient, zero)
-    # indices = tf.where(where)
-    # masked = tf.boolean_mask(gradient, where)
-    # sparse_gradient = tf.SparseTensor(indices, tf.transpose(masked), [num_features, 1])
-    #
-    # # Update the model
-    # dense_gradient = tf.sparse_to_dense(tf.sparse_tensor_to_dense(index),
-    #         [num_features],
-    #         gradient)
-    # dense_gradient = tf.reshape(dense_gradient, [num_features, 1])
-    # x = tf.IndexedSlices(gradient, tf.sparse_tensor_to_dense(index) ,dense_shape=tf.constant([num_features, 1]))
-    # rx = tf.rank(x)
+
+    # TODO rough work to be deleted after you are done experimenting
+    # gradient = tf.reshape(gradient, tf.shape(value))
+    # index_mod = tf.reshape(index.values, shape=[tf.shape(value)[0], 1])
+    # sparse_0 = tf.SparseTensor(indices=index_mod, values=gradient, shape=[num_features])
+    # sparse_2 = tf.sparse_add(tf.sparse_add(sparse_0, sparse_0), sparse_0)
+    # shape_test = tf.shape(sparse_2)
+    # index_total = tf.reshape(sparse_0.indices, tf.shape(value))
+    # gradient_total = tf.reshape(sparse_0.values, [tf.shape(value)[0],1])
+    # update_model = tf.scatter_add(w, index_total, gradient_total)
+
+    # TODO uncomment the below line for the correct calculations
     update_model = tf.scatter_add(w, index.values, tf.reshape(tf.mul(gradient, -0.01), shape=[tf.shape(value)[0], 1]))
 
 
@@ -98,25 +87,12 @@ with g.as_default():
     tf.train.start_queue_runners(sess=sess)
 
     # Run n iterations
-    n = 100
+    n = 1
     e = 2000
     count = 0
     start_total = time.time()
     for i in range(0, n):
         # start_time = time.time()
-        output_g = sess.run(update_model)
-        # print "Time taken for 1 iteration :: " + str(i) + ' -- ' + str(time.time() - start_time)
-        # print (output_g)
-        # print (output_g.indices)
-        # print (output_g)
-        # if i % 100 == 0 :
-        #     start = time.time()
-        #     count = 0
-        #     for j in range(0,e):
-        #         output_sign = sess.run(sign_values)
-        #         if output_sign[0] != output_sign[1]:
-        #             count+=1
-        #     print "*********Mistakes: " + str(count), str(e) + "**********"
-        #     # loss_out = sess.run(loss)
-        #     print "Time in calculating mistakes on test set: " + str(time.time() - start)
+        output = sess.run(index)
+        print (output)
     print "Time taken for " + str(n) + " iteration :: " + str(time.time() - start_total)
