@@ -103,7 +103,7 @@ with g.as_default():
         # sign_values = [sign_actual, sign_expected]
 
     # Create a session
-    with tf.Session("grpc://vm-8-1:2222" ) as sess:
+    with tf.Session("grpc://vm-8-%d:2222" % (FLAGS.task_index+1)) as sess:
         # only one client initializes the variable
         if FLAGS.task_index == 0:
             sess.run(tf.initialize_all_variables())
@@ -113,7 +113,7 @@ with g.as_default():
         # Start the queue readers
         threads = tf.train.start_queue_runners(sess=sess, coord=coord)
         # Run n iterations
-        n = 100
+        n = 10
         e = 200
         count = 0
         try:
