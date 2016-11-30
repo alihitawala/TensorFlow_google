@@ -81,10 +81,12 @@ with g.as_default():
                     ) - 1)
                 ), x_filtered)
         local_gradient = tf.reshape(tf.mul(tf.reshape(local_gradient, tf.shape(value)), -0.01), [tf.shape(value)[0], 1])
+        with tf.device("/job:worker/task:0"):
+            assign_op = tf.scatter_add(w, index.values, local_gradient)
 
     # we create an operator to aggregate the local gradients
-    with tf.device("/job:worker/task:0"):
-        assign_op = tf.scatter_add(w, index.values, local_gradient)
+    # with tf.device("/job:worker/task:0"):
+    #     assign_op = tf.scatter_add(w, index.values, local_gradient)
         # dense_gradient = tf.sparse_to_dense(tf.sparse_tensor_to_dense(index),
         #     [num_features],
         #     local_gradient)
@@ -120,7 +122,7 @@ with g.as_default():
             # Run training steps or whatever
             for i in range(0, n):
                 start = time.time()
-                sess.run(local_gradient)
+                sess.run(assign_op)
             #     print "Time taken for training iteration " + str(i) + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start)
             #     if FLAGS.task_index == 0 and i % 10 == 0:
             #         start = time.time()
