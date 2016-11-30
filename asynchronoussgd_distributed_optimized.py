@@ -103,7 +103,7 @@ with g.as_default():
         # sign_values = [sign_actual, sign_expected]
 
     # Create a session
-    with tf.Session("grpc://vm-8-0:2222" ) as sess:
+    with tf.Session("grpc://vm-8-1:2222" ) as sess:
         # only one client initializes the variable
         if FLAGS.task_index == 0:
             sess.run(tf.initialize_all_variables())
