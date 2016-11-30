@@ -92,14 +92,14 @@ with g.as_default():
     # we create an operator to aggregate the local gradients
     with tf.device("/job:worker/task:0"):
         # sparse_0 = tf.SparseTensor(indices=gradients[0][1].values, values=gradients[0][0], shape=[num_features, 1])
-        total_gradient = tf.constant(tf.sparse_add(
+        total_gradient = tf.sparse_add(
                     tf.sparse_add(
                         tf.sparse_add(
                             tf.sparse_add(
                                 gradients[0], gradients[1]
                             ), gradients[2]),
                         gradients[3]),
-                    gradients[4]))
+                    gradients[4])
         # assign_op = tf.scatter_add(
         #                 tf.scatter_add(
         #                     tf.scatter_add(
