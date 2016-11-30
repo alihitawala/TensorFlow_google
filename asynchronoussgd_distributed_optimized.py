@@ -62,7 +62,9 @@ with g.as_default():
     # dense_x = {}
     with tf.device("/job:worker/task:%d" % FLAGS.task_index):
         label, index, value = get_next_row(file_names[str(FLAGS.task_index)])
-        w_filtered = tf.gather(w, index.values)
+        w_filtered = None
+        with tf.device("/job:worker/task:0"):
+            w_filtered = tf.gather(w, index.values)
         x_filtered = tf.reshape(tf.convert_to_tensor(value.values, dtype=tf.float32), [tf.shape(value)[0], 1])
         l_filtered = label
         local_gradient = tf.mul(
