@@ -82,22 +82,24 @@ with g.as_default():
                             )
                         ) - 1)
                     ), x_filtered)
-            local_gradient = tf.mul(tf.reshape(local_gradient, tf.shape(value)), -0.01)
-            index_mod = tf.reshape(index.values, shape=[tf.shape(value)[0], 1])
-            sparse_g = tf.SparseTensor(indices=index_mod, values=local_gradient, shape=[num_features])
-            gradients.append(sparse_g)
+            gradients.append(tf.SparseTensor(
+                    indices=tf.reshape(index.values, shape=[tf.shape(value)[0], 1]),
+                    values=tf.mul(tf.reshape(local_gradient, tf.shape(value)), -0.01),
+                    shape=tf.cast(tf.shape(value), tf.int64)
+                )
+            )
 
     # we create an operator to aggregate the local gradients
     with tf.device("/job:worker/task:0"):
         # sparse_0 = tf.SparseTensor(indices=gradients[0][1].values, values=gradients[0][0], shape=[num_features, 1])
-        add_g = tf.sparse_add(
+        total_gradient = tf.constant(tf.sparse_add(
                     tf.sparse_add(
                         tf.sparse_add(
                             tf.sparse_add(
                                 gradients[0], gradients[1]
                             ), gradients[2]),
                         gradients[3]),
-                    gradients[4])
+                    gradients[4]))
         # assign_op = tf.scatter_add(
         #                 tf.scatter_add(
         #                     tf.scatter_add(
@@ -107,10 +109,11 @@ with g.as_default():
         #                         gradients[2][1].values, gradients[2][0]),
         #                     gradients[3][1].values, gradients[3][0]),
         #                 gradients[4][1].values, gradients[4][0])
-
-        index_total = tf.reshape(add_g.indices, shape=tf.shape(add_g.values))
-        gradient_total = tf.reshape(add_g.values, [tf.shape(add_g.values)[0],1])
+        total_values = total_gradient.values
+        index_total = tf.reshape(total_gradient.indices, shape=tf.shape(total_values))
+        gradient_total = tf.reshape(total_values, [tf.shape(total_values)[0],1])
         assign_op = tf.scatter_add(w, index_total, gradient_total)
+
         test_label, test_index, test_value = get_next_row(test_file_names)
         # test_dense_x = get_dense_x(test_index, test_value)
         test_w_filtered = tf.gather(w, test_index.values)
