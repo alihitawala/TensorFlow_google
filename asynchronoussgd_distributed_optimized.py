@@ -21,9 +21,28 @@ data_dir = "./data/criteo-tfr-big"
 #           data_dir + '/tfrecords19'], '4': [data_dir + '/tfrecords20', data_dir + '/tfrecords21']}
 file_names = {
     '0': [data_dir + '/tfrecords00'],
-    '1': [data_dir + '/tfrecords05'],
-    '2': [data_dir + '/tfrecords10'],
-    '3': [data_dir + '/tfrecords15'], '4': [data_dir + '/tfrecords20']}
+    '1': [data_dir + '/tfrecords01'],
+    '2': [data_dir + '/tfrecords02'],
+    '3': [data_dir + '/tfrecords03'],
+    '4': [data_dir + '/tfrecords04'],
+    '5': [data_dir + '/tfrecords05'],
+    '6': [data_dir + '/tfrecords06'],
+    '7': [data_dir + '/tfrecords07'],
+    '8': [data_dir + '/tfrecords08'],
+    '9': [data_dir + '/tfrecords09'],
+    '10': [data_dir + '/tfrecords10'],
+    '11': [data_dir + '/tfrecords11'],
+    '12': [data_dir + '/tfrecords12'],
+    '13': [data_dir + '/tfrecords13'],
+    '14': [data_dir + '/tfrecords14'],
+    '15': [data_dir + '/tfrecords15'],
+    '16': [data_dir + '/tfrecords16'],
+    '17': [data_dir + '/tfrecords17'],
+    '18': [data_dir + '/tfrecords18'],
+    '19': [data_dir + '/tfrecords19'],
+    '20': [data_dir + '/tfrecords20'],
+    '21': [data_dir + '/tfrecords21'],
+}
 test_file_names = [data_dir + '/tfrecords22']
 
 
@@ -103,7 +122,7 @@ with g.as_default():
         # sign_values = [sign_actual, sign_expected]
 
     # Create a session
-    with tf.Session("grpc://vm-8-%d:2222" % (FLAGS.task_index+1)) as sess:
+    with tf.Session("grpc://vm-8-%d:2222" % 1) as sess:
         # only one client initializes the variable
         if FLAGS.task_index == 0:
             sess.run(tf.initialize_all_variables())
