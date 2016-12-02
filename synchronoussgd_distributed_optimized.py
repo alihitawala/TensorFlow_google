@@ -139,6 +139,7 @@ with g.as_default():
         count = 0
         try:
             start_total = time.time()
+            print "Running " + str(n) + " iterations for sync dist optimized"
             for i in range(0, n):
                 start = time.time()
                 sess.run(assign_op)
