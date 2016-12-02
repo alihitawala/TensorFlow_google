@@ -132,8 +132,9 @@ with g.as_default():
         # Start the queue readers
         tf.train.start_queue_runners(sess=sess)
         # Run n iterations
-        n = 100
-        e = 2000
+        n = 1000
+        e = 2000000
+        ep = 100
         count = 0
         try:
             start_total = time.time()
@@ -141,16 +142,15 @@ with g.as_default():
                 start = time.time()
                 sess.run(assign_op)
                 print "Time taken for training iteration " + str(i) + ": " + str(time.time() - start)
-                # if i % 10 == 0:
-                #     start = time.time()
-                #     count = 0
-                #     for j in range(0,e):
-                #         output_sign = sess.run(sign_values)
-                #         if output_sign[0] != output_sign[1]:
-                #             count+=1
-                #     print "*********Mistakes: " + str(count), str(e) + "**********"
-                #     # loss_out = sess.run(loss)
-                #     print "Time in calculating mistakes on test set: " + str(time.time() - start)
+                if i % ep == 0:
+                    start = time.time()
+                    count = 0
+                    for j in range(0,e):
+                        output_sign = sess.run(sign_values)
+                        if output_sign[0] != output_sign[1]:
+                            count+=1
+                    print "*********Mistakes: " + str(count), str(e) + "**********"
+                    print "Time in calculating mistakes on test set: " + str(time.time() - start)
             print "Total time taken for " + str(n) + " iterations : " + str(time.time() - start_total)
         except tf.errors.OutOfRangeError:
             print('Done training -- epoch limit reached')
