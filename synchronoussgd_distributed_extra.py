@@ -146,7 +146,7 @@ with g.as_default():
         # Run n iterations
         n = 1000
         ep = 100
-        e = 2000
+        e = 2000000
         count = 0
         try:
             start_total = time.time()
