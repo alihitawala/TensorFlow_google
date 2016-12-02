@@ -7,7 +7,7 @@ source tfdefs.sh
 # startserver.py has the specifications for the cluster.
 start_cluster startserver.py
 
-echo "Executing the distributed tensorflow job from exampleDistributed.py"
+echo "Executing the distributed tensorflow synchronous optimized synchronoussgd_distributed_optimized.py"
 # testdistributed.py is a client that can run jobs on the cluster.
 # please read testdistributed.py to understand the steps defining a Graph and
 # launch a session to run the Graph
