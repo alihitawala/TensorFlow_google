@@ -4,11 +4,12 @@ import time
 
 # Number of features
 num_features = 33762578
-BATCH_SIZE = 3
+BATCH_SIZE = 1000
 
 g = tf.Graph()
 data_dir = "./data/criteo-tfr-big"
-file_names = [data_dir + '/tfrecords00', data_dir + '/tfrecords01', data_dir + '/tfrecords02']
+file_names = [data_dir + '/tfrecords00']
+# file_names = [data_dir + '/tfrecords00', data_dir + '/tfrecords01', data_dir + '/tfrecords02']
 test_file_names = [data_dir + '/tfrecords22']
 
 def get_next_batch(file_names):
@@ -58,7 +59,7 @@ with g.as_default():
     unique_x = tf.unique(index.values).y
     unique_x_filtering = tf.reshape(unique_x, shape=[tf.shape(unique_x)[0],1])
     # dense_index = tf.reshape(dense_index, shape=[2, BATCH_SIZE*])
-    w = tf.Variable(tf.random_uniform([num_features,1]), name="model")
+    w = tf.Variable(tf.ones([num_features,1]), name="model")
     # w_filtered = tf.gather_nd(w, unique_x_filtering)
     # w_filtered_sparse = tf.sparse_reorder(tf.SparseTensor(unique_x_filtering, w_filtered, shape=[num_features]))
     # slice_index = []
