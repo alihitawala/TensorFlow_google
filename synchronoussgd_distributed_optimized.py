@@ -4,6 +4,7 @@ import time
 
 # Number of features
 num_features = 33762578
+learning_rate = -0.1
 
 g = tf.Graph()
 
@@ -55,8 +56,8 @@ tf.set_random_seed(1024)
 with g.as_default():
     # Create a model
     with tf.device("/job:worker/task:0"):
-        # w = tf.Variable(tf.random_uniform([num_features, 1], -1, 1), name="model")
-        w = tf.Variable(tf.zeros([num_features, 1]), name="model")
+        w = tf.Variable(tf.random_uniform([num_features, 1], -1, 1), name="model")
+        # w = tf.Variable(tf.zeros([num_features, 1]), name="model")
 
 
     # Compute the gradient
@@ -85,7 +86,7 @@ with g.as_default():
                     ), x_filtered)
             gradients.append(tf.SparseTensor(
                     indices=tf.reshape(index.values, shape=[tf.shape(value)[0], 1]),
-                    values=tf.mul(tf.reshape(local_gradient, tf.shape(value)), -0.1),
+                    values=tf.mul(tf.reshape(local_gradient, tf.shape(value)), learning_rate),
                     shape=[num_features]
                 )
             )
