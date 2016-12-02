@@ -4,7 +4,7 @@ import time
 
 # Number of features
 num_features = 33762578
-BATCH_SIZE = 100
+BATCH_SIZE = 1000
 
 g = tf.Graph()
 data_dir = "./data/criteo-tfr-big"
@@ -144,12 +144,13 @@ with g.as_default():
         # Start the queue readers
         tf.train.start_queue_runners(sess=sess)
         # Run n iterations
-        n = 1000
-        ep = 100
-        e = 2000000
+        n = 10000
+        ep = 1000
+        e = 200000
         count = 0
         try:
             start_total = time.time()
+            print "Batch size for this run is :: " + str(BATCH_SIZE)
             for i in range(0, n):
                 start = time.time()
                 sess.run(assign_op)
