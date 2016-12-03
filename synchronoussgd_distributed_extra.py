@@ -4,7 +4,7 @@ import time
 
 # Number of features
 num_features = 33762578
-BATCH_SIZE = 1000
+BATCH_SIZE = 100
 
 g = tf.Graph()
 data_dir = "./data/criteo-tfr-big"
