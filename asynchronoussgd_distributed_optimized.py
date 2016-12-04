@@ -139,12 +139,11 @@ with g.as_default():
             for i in range(0, n):
                 start = time.time()
                 sess.run(assign_op)
-                c = counter.eval()
-                print c
                 print "Time taken for training iteration " + str(i)  + " : " + str(time.time() - start)
-                if c[0] % ep == 0:
+                if (i+1) % ep == 0 and FLAGS.task_index == '10':
                     # in 10th session running on vm-1 but actual iteration depends on vm-3
                     start = time.time()
+                    c = counter.eval()
                     count = 0
                     for j in range(0, e):
                         output_sign = sess.run(sign_values)
