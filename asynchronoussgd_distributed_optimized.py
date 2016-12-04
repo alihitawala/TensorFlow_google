@@ -131,7 +131,7 @@ with g.as_default():
         threads = tf.train.start_queue_runners(sess=sess, coord=coord)
         # Run n iterations
         n = 10
-        ep = 10
+        ep = 3
         e = 20000
         count = 0
         try:
