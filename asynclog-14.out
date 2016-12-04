@@ -1,0 +1,17 @@
+====================*************
+===============
+-------------
+1480829353.35
+-------------
+Traceback (most recent call last):
+  File "asynchronoussgd_distributed_optimized.py", line 169, in <module>
+    coord.join(threads)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 1165, in __exit__
+    self.close()
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 519, in close
+    tf_session.TF_CloseSession(self._session, status)
+  File "/usr/lib/python2.7/contextlib.py", line 24, in __exit__
+    self.gen.next()
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/framework/errors.py", line 463, in raise_exception_on_not_ok_status
+    pywrap_tensorflow.TF_GetCode(status))
+tensorflow.python.framework.errors.AbortedError: Session 1d76b0dce6c0a6d4 is not found. Possibly, this master has restarted.

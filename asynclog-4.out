@@ -1,11 +1,24 @@
-Time taken for training iteration 0 at : vm-5 : 7.38933300972
-Time taken for training iteration 1 at : vm-5 : 5.89835500717
-Time taken for training iteration 2 at : vm-5 : 5.50043201447
-Time taken for training iteration 3 at : vm-5 : 5.5713429451
-Time taken for training iteration 4 at : vm-5 : 5.27887010574
-Time taken for training iteration 5 at : vm-5 : 5.64136910439
-Time taken for training iteration 6 at : vm-5 : 5.72295308113
-Time taken for training iteration 7 at : vm-5 : 6.38201808929
-Time taken for training iteration 8 at : vm-5 : 5.00257706642
-Time taken for training iteration 9 at : vm-5 : 4.19013905525
-Total time taken for 10 iterations :  at : vm-5 : 56.5776700974
+====================*************
+===============
+-------------
+1480829353.96
+-------------
+Traceback (most recent call last):
+  File "asynchronoussgd_distributed_optimized.py", line 151, in <module>
+    sess.run(assign_op)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 717, in run
+    run_metadata_ptr)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 915, in _run
+    feed_dict_string, options, run_metadata)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 965, in _do_run
+    target_list, options, run_metadata)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 985, in _do_call
+    raise type(e)(node_def, op, message)
+tensorflow.python.framework.errors.InvalidArgumentError: A session is not created yet....
+Exception in thread Thread-2 (most likely raised during interpreter shutdown):
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/threading.py", line 810, in __bootstrap_inner
+  File "/usr/lib/python2.7/threading.py", line 763, in run
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/training/queue_runner.py", line 264, in _close_on_stop
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 708, in run
+<type 'exceptions.AttributeError'>: 'NoneType' object has no attribute 'TF_NewBuffer'

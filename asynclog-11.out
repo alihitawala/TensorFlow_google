@@ -1,0 +1,61 @@
+====================*************
+===============
+-------------
+1480829353.37
+-------------
+Traceback (most recent call last):
+  File "asynchronoussgd_distributed_optimized.py", line 151, in <module>
+    sess.run(assign_op)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 717, in run
+    run_metadata_ptr)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 915, in _run
+    feed_dict_string, options, run_metadata)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 965, in _do_run
+    target_list, options, run_metadata)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 985, in _do_call
+    raise type(e)(node_def, op, message)
+tensorflow.python.framework.errors.InvalidArgumentError: Cannot assign a device to node 'TFRecordReader': Could not satisfy explicit device specification '/job:worker/task:2' because no devices matching that specification are registered in this process; available devices: /job:worker/replica:0/task:0/cpu:0, /job:worker/replica:0/task:1/cpu:0, /job:worker/replica:0/task:3/cpu:0, /job:worker/replica:0/task:4/cpu:0
+Colocation Debug Info:
+Colocation group had the following types and devices: 
+QueueEnqueueMany: CPU 
+QueueClose: CPU 
+QueueSize: CPU 
+FIFOQueue: CPU 
+ReaderRead: CPU 
+TFRecordReader: CPU 
+	 [[Node: TFRecordReader = TFRecordReader[compression_type="", container="", shared_name="", _device="/job:worker/task:2"]()]]
+
+Caused by op u'TFRecordReader', defined at:
+  File "asynchronoussgd_distributed_optimized.py", line 85, in <module>
+    label, index, value = get_next_row(file_names[str(FLAGS.task_index)])
+  File "asynchronoussgd_distributed_optimized.py", line 53, in get_next_row
+    reader = tf.TFRecordReader()
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/ops/io_ops.py", line 471, in __init__
+    name=name, compression_type=compression_type)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/ops/gen_io_ops.py", line 505, in _tf_record_reader
+    compression_type=compression_type, name=name)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/framework/op_def_library.py", line 749, in apply_op
+    op_def=op_def)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/framework/ops.py", line 2380, in create_op
+    original_op=self._default_original_op, op_def=op_def)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/framework/ops.py", line 1298, in __init__
+    self._traceback = _extract_stack()
+
+InvalidArgumentError (see above for traceback): Cannot assign a device to node 'TFRecordReader': Could not satisfy explicit device specification '/job:worker/task:2' because no devices matching that specification are registered in this process; available devices: /job:worker/replica:0/task:0/cpu:0, /job:worker/replica:0/task:1/cpu:0, /job:worker/replica:0/task:3/cpu:0, /job:worker/replica:0/task:4/cpu:0
+Colocation Debug Info:
+Colocation group had the following types and devices: 
+QueueEnqueueMany: CPU 
+QueueClose: CPU 
+QueueSize: CPU 
+FIFOQueue: CPU 
+ReaderRead: CPU 
+TFRecordReader: CPU 
+	 [[Node: TFRecordReader = TFRecordReader[compression_type="", container="", shared_name="", _device="/job:worker/task:2"]()]]
+
+Exception in thread Thread-1 (most likely raised during interpreter shutdown):
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/threading.py", line 810, in __bootstrap_inner
+  File "/usr/lib/python2.7/threading.py", line 763, in run
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/training/queue_runner.py", line 225, in _run
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 722, in run
+<type 'exceptions.AttributeError'>: 'NoneType' object has no attribute 'TF_DeleteBuffer'

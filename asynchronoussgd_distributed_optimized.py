@@ -10,15 +10,16 @@ g = tf.Graph()
 
 # Get the list of all files in the input data directory
 data_dir = "./data/criteo-tfr-big"
-# file_names = {
-#     '0': [data_dir + '/tfrecords00', data_dir + '/tfrecords01', data_dir + '/tfrecords02', data_dir + '/tfrecords03',
-#           data_dir + '/tfrecords04'],
-#     '1': [data_dir + '/tfrecords05', data_dir + '/tfrecords06', data_dir + '/tfrecords07', data_dir + '/tfrecords08',
-#           data_dir + '/tfrecords09'],
-#     '2': [data_dir + '/tfrecords10', data_dir + '/tfrecords11', data_dir + '/tfrecords12', data_dir + '/tfrecords13',
-#           data_dir + '/tfrecords14'],
-#     '3': [data_dir + '/tfrecords15', data_dir + '/tfrecords16', data_dir + '/tfrecords17', data_dir + '/tfrecords18',
-#           data_dir + '/tfrecords19'], '4': [data_dir + '/tfrecords20', data_dir + '/tfrecords21']}
+file_names = {
+     '0': [data_dir + '/tfrecords00', data_dir + '/tfrecords01', data_dir + '/tfrecords02', data_dir + '/tfrecords03',
+           data_dir + '/tfrecords04'],
+     '1': [data_dir + '/tfrecords05', data_dir + '/tfrecords06', data_dir + '/tfrecords07', data_dir + '/tfrecords08',
+           data_dir + '/tfrecords09'],
+     '2': [data_dir + '/tfrecords10', data_dir + '/tfrecords11', data_dir + '/tfrecords12', data_dir + '/tfrecords13',
+           data_dir + '/tfrecords14'],
+     '3': [data_dir + '/tfrecords15', data_dir + '/tfrecords16', data_dir + '/tfrecords17', data_dir + '/tfrecords18',
+           data_dir + '/tfrecords19'], '4': [data_dir + '/tfrecords20', data_dir + '/tfrecords21']}
+
 file_names = {
     '0': [data_dir + '/tfrecords00'],
     '1': [data_dir + '/tfrecords01'],
@@ -43,6 +44,7 @@ file_names = {
     '20': [data_dir + '/tfrecords20'],
     '21': [data_dir + '/tfrecords21'],
 }
+
 test_file_names = [data_dir + '/tfrecords22']
 
 
@@ -79,7 +81,7 @@ with g.as_default():
 
     # Compute the gradient
     # dense_x = {}
-    with tf.device("/job:worker/task:%d" % FLAGS.task_index):
+    with tf.device("/job:worker/task:%d" % (int(FLAGS.task_index)/5)):
         label, index, value = get_next_row(file_names[str(FLAGS.task_index)])
         w_filtered = None
         with tf.device("/job:worker/task:0"):
@@ -123,6 +125,7 @@ with g.as_default():
 
     # Create a session
     with tf.Session("grpc://vm-8-%d:2222" % 1) as sess:
+        print "====================*************"
         # only one client initializes the variable
         if FLAGS.task_index == 0:
             sess.run(tf.initialize_all_variables())
@@ -137,9 +140,13 @@ with g.as_default():
         count = 0
         try:
             start_total = time.time()
+            print "==============="
             # while not coord.should_stop():
             # Run training steps or whatever
             for i in range(0, n):
+                print "-------------"
+                print time.time()
+                print "-------------"
                 start = time.time()
                 sess.run(assign_op)
             #     print "Time taken for training iteration " + str(i) + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start)
@@ -160,4 +167,4 @@ with g.as_default():
 
         # Wait for threads to finish.
         coord.join(threads)
-        sess.close()
+        #sess.close()

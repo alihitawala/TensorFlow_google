@@ -1,7 +1,7 @@
 ====================*************
 ===============
 -------------
-1480829353.46
+1480829353.37
 -------------
 Traceback (most recent call last):
   File "asynchronoussgd_distributed_optimized.py", line 151, in <module>
@@ -15,3 +15,10 @@ Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 985, in _do_call
     raise type(e)(node_def, op, message)
 tensorflow.python.framework.errors.InvalidArgumentError: A session is not created yet....
+Exception in thread Thread-2 (most likely raised during interpreter shutdown):
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/threading.py", line 810, in __bootstrap_inner
+  File "/usr/lib/python2.7/threading.py", line 763, in run
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/training/queue_runner.py", line 264, in _close_on_stop
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 708, in run
+<type 'exceptions.AttributeError'>: 'NoneType' object has no attribute 'TF_NewBuffer'

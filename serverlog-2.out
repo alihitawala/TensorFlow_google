@@ -1,5 +1,35 @@
 nohup: ignoring input
 I tensorflow/core/distributed_runtime/rpc/grpc_channel.cc:197] Initialize GrpcChannelCache for job worker -> {0 -> vm-8-1:2222, 1 -> localhost:2222, 2 -> vm-8-3:2222, 3 -> vm-8-4:2222, 4 -> vm-8-5:2222}
 I tensorflow/core/distributed_runtime/rpc/grpc_server_lib.cc:206] Started server with target: grpc://localhost:2222
-W tensorflow/core/kernels/queue_base.cc:294] _0_input_producer_1: Skipping cancelled enqueue attempt with queue not closed
-bash: line 1: 18340 Killed                  python startserver.py --task_index=1
+I tensorflow/core/distributed_runtime/master_session.cc:928] Start master session 1b8128120d478da5 with config: 
+
+I tensorflow/core/distributed_runtime/master_session.cc:928] Start master session 8dbdb4b21a4e56a6 with config: 
+
+E tensorflow/core/distributed_runtime/master.cc:202] Master init: Unavailable: {"created":"@1480829353.616094281","description":"OS Error","errno":104,"file":"external/grpc/src/core/lib/iomgr/tcp_posix.c","file_line":229,"grpc_status":14,"os_error":"Connection reset by peer","syscall":"recvmsg"}
+E tensorflow/core/distributed_runtime/master.cc:202] Master init: Unavailable: {"created":"@1480829353.616094281","description":"OS Error","errno":104,"file":"external/grpc/src/core/lib/iomgr/tcp_posix.c","file_line":229,"grpc_status":14,"os_error":"Connection reset by peer","syscall":"recvmsg"}
+E tensorflow/core/distributed_runtime/master.cc:202] Master init: Unavailable: {"created":"@1480829353.616094281","description":"OS Error","errno":104,"file":"external/grpc/src/core/lib/iomgr/tcp_posix.c","file_line":229,"grpc_status":14,"os_error":"Connection reset by peer","syscall":"recvmsg"}
+E tensorflow/core/distributed_runtime/master.cc:202] Master init: Unavailable: {"created":"@1480829353.616094281","description":"OS Error","errno":104,"file":"external/grpc/src/core/lib/iomgr/tcp_posix.c","file_line":229,"grpc_status":14,"os_error":"Connection reset by peer","syscall":"recvmsg"}
+E tensorflow/core/distributed_runtime/master.cc:202] Master init: Unavailable: {"created":"@1480829353.705986136","description":"OS Error","errno":104,"file":"external/grpc/src/core/lib/iomgr/tcp_posix.c","file_line":229,"grpc_status":14,"os_error":"Connection reset by peer","syscall":"recvmsg"}
+E tensorflow/core/distributed_runtime/master.cc:202] Master init: Unavailable: {"created":"@1480829353.705986136","description":"OS Error","errno":104,"file":"external/grpc/src/core/lib/iomgr/tcp_posix.c","file_line":229,"grpc_status":14,"os_error":"Connection reset by peer","syscall":"recvmsg"}
+E tensorflow/core/distributed_runtime/master.cc:202] Master init: Unavailable: {"created":"@1480829353.705986136","description":"OS Error","errno":104,"file":"external/grpc/src/core/lib/iomgr/tcp_posix.c","file_line":229,"grpc_status":14,"os_error":"Connection reset by peer","syscall":"recvmsg"}
+I tensorflow/core/distributed_runtime/master_session.cc:845] DeregisterGraph error: Aborted: Graph handle is not found: . Possibly, this worker just restarted.
+I tensorflow/core/distributed_runtime/master_session.cc:845] DeregisterGraph error: Aborted: Graph handle is not found: . Possibly, this worker just restarted.
+I tensorflow/core/distributed_runtime/master_session.cc:845] DeregisterGraph error: Aborted: Graph handle is not found: . Possibly, this worker just restarted.
+E tensorflow/core/distributed_runtime/master.cc:202] Master init: Unavailable: {"created":"@1480829354.041698942","description":"OS Error","errno":104,"file":"external/grpc/src/core/lib/iomgr/tcp_posix.c","file_line":229,"grpc_status":14,"os_error":"Connection reset by peer","syscall":"recvmsg"}
+E tensorflow/core/distributed_runtime/master.cc:202] Master init: Unavailable: {"created":"@1480829362.585977554","description":"OS Error","errno":104,"file":"external/grpc/src/core/lib/iomgr/tcp_posix.c","file_line":229,"grpc_status":14,"os_error":"Connection reset by peer","syscall":"recvmsg"}
+E tensorflow/core/distributed_runtime/master.cc:202] Master init: Unavailable: {"created":"@1480829362.585977554","description":"OS Error","errno":104,"file":"external/grpc/src/core/lib/iomgr/tcp_posix.c","file_line":229,"grpc_status":14,"os_error":"Connection reset by peer","syscall":"recvmsg"}
+E tensorflow/core/distributed_runtime/master.cc:202] Master init: Unavailable: {"created":"@1480829362.585977554","description":"OS Error","errno":104,"file":"external/grpc/src/core/lib/iomgr/tcp_posix.c","file_line":229,"grpc_status":14,"os_error":"Connection reset by peer","syscall":"recvmsg"}
+E tensorflow/core/distributed_runtime/master.cc:202] Master init: Unavailable: {"created":"@1480829362.585977554","description":"OS Error","errno":104,"file":"external/grpc/src/core/lib/iomgr/tcp_posix.c","file_line":229,"grpc_status":14,"os_error":"Connection reset by peer","syscall":"recvmsg"}
+E tensorflow/core/distributed_runtime/master.cc:202] Master init: Unavailable: {"created":"@1480829362.585977554","description":"OS Error","errno":104,"file":"external/grpc/src/core/lib/iomgr/tcp_posix.c","file_line":229,"grpc_status":14,"os_error":"Connection reset by peer","syscall":"recvmsg"}
+I tensorflow/core/distributed_runtime/master_session.cc:928] Start master session f755313e602e0826 with config: 
+
+I tensorflow/core/distributed_runtime/master_session.cc:928] Start master session d99c907f1efa07e7 with config: 
+
+I tensorflow/core/distributed_runtime/master_session.cc:928] Start master session 4962dda6883b2972 with config: 
+
+I tensorflow/core/distributed_runtime/master_session.cc:928] Start master session 28f07e732dc5797b with config: 
+
+I tensorflow/core/distributed_runtime/master_session.cc:928] Start master session c1030957bc850250 with config: 
+
+F tensorflow/core/distributed_runtime/graph_mgr.cc:55] 'unit.device' Must be non NULL
+bash: line 1: 24661 Aborted                 (core dumped) python startserver_async.py --task_index=1

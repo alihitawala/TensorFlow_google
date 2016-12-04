@@ -8,7 +8,7 @@ export GROUP_NUM=8
 function terminate_cluster() {
     echo "Terminating the servers"
 #    CMD="ps aux | grep -v 'grep' | grep 'python startserver' | awk -F' ' '{print $2}' | xargs kill -9"
-    CMD="ps aux | grep -v 'grep' | grep -v 'bash' | grep -v 'ssh' | grep 'python startserver' | awk -F' ' '{print \$2}' | xargs kill -9"
+    CMD="ps aux | grep -v 'grep' | grep -v 'bash' | grep -v 'ssh' | grep 'python startserver' | grep 'python startserver_async' | awk -F' ' '{print \$2}' | xargs kill -9"
     for i in `seq 1 5`; do
         ssh ubuntu@vm-$GROUP_NUM-$i "$CMD"
     done
@@ -33,32 +33,32 @@ function start_cluster() {
 
         echo "Starting tensorflow servers on all hosts based on the spec in $1"
         echo "The server output is logged to serverlog-i.out, where i = 1, ..., 5 are the VM numbers."
-        nohup ssh ubuntu@vm-$GROUP_NUM-1 "cd /home/ubuntu/run ; python startserver.py --task_index=0" > serverlog-1.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-1 "cd /home/ubuntu/run ; python startserver.py --task_index=1" > serverlog-2.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-1 "cd /home/ubuntu/run ; python startserver.py --task_index=2" > serverlog-3.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-1 "cd /home/ubuntu/run ; python startserver.py --task_index=3" > serverlog-4.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-1 "cd /home/ubuntu/run ; python startserver.py --task_index=4" > serverlog-5.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-1 "cd /home/ubuntu/run ; python startserver_async.py --task_index=0" > serverlog-1.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-1 "cd /home/ubuntu/run ; python startserver_async.py --task_index=1" > serverlog-2.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-1 "cd /home/ubuntu/run ; python startserver_async.py --task_index=2" > serverlog-3.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-1 "cd /home/ubuntu/run ; python startserver_async.py --task_index=3" > serverlog-4.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-1 "cd /home/ubuntu/run ; python startserver_async.py --task_index=4" > serverlog-5.out 2>&1&
 
-        nohup ssh ubuntu@vm-$GROUP_NUM-2 "cd /home/ubuntu/run ; python startserver.py --task_index=5" > serverlog-6.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-2 "cd /home/ubuntu/run ; python startserver.py --task_index=6" > serverlog-7.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-2 "cd /home/ubuntu/run ; python startserver.py --task_index=7" > serverlog-8.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-2 "cd /home/ubuntu/run ; python startserver.py --task_index=8" > serverlog-9.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-2 "cd /home/ubuntu/run ; python startserver.py --task_index=9" > serverlog-10.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-2 "cd /home/ubuntu/run ; python startserver_async.py --task_index=5" > serverlog-6.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-2 "cd /home/ubuntu/run ; python startserver_async.py --task_index=6" > serverlog-7.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-2 "cd /home/ubuntu/run ; python startserver_async.py --task_index=7" > serverlog-8.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-2 "cd /home/ubuntu/run ; python startserver_async.py --task_index=8" > serverlog-9.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-2 "cd /home/ubuntu/run ; python startserver_async.py --task_index=9" > serverlog-10.out 2>&1&
 
-        nohup ssh ubuntu@vm-$GROUP_NUM-3 "cd /home/ubuntu/run ; python startserver.py --task_index=10" > serverlog-11.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-3 "cd /home/ubuntu/run ; python startserver.py --task_index=11" > serverlog-12.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-3 "cd /home/ubuntu/run ; python startserver.py --task_index=12" > serverlog-13.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-3 "cd /home/ubuntu/run ; python startserver.py --task_index=13" > serverlog-14.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-3 "cd /home/ubuntu/run ; python startserver.py --task_index=14" > serverlog-15.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-3 "cd /home/ubuntu/run ; python startserver_async.py --task_index=10" > serverlog-11.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-3 "cd /home/ubuntu/run ; python startserver_async.py --task_index=11" > serverlog-12.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-3 "cd /home/ubuntu/run ; python startserver_async.py --task_index=12" > serverlog-13.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-3 "cd /home/ubuntu/run ; python startserver_async.py --task_index=13" > serverlog-14.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-3 "cd /home/ubuntu/run ; python startserver_async.py --task_index=14" > serverlog-15.out 2>&1&
 
-        nohup ssh ubuntu@vm-$GROUP_NUM-4 "cd /home/ubuntu/run ; python startserver.py --task_index=15" > serverlog-16.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-4 "cd /home/ubuntu/run ; python startserver.py --task_index=16" > serverlog-17.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-4 "cd /home/ubuntu/run ; python startserver.py --task_index=17" > serverlog-18.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-4 "cd /home/ubuntu/run ; python startserver.py --task_index=18" > serverlog-19.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-4 "cd /home/ubuntu/run ; python startserver.py --task_index=19" > serverlog-20.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-4 "cd /home/ubuntu/run ; python startserver_async.py --task_index=15" > serverlog-16.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-4 "cd /home/ubuntu/run ; python startserver_async.py --task_index=16" > serverlog-17.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-4 "cd /home/ubuntu/run ; python startserver_async.py --task_index=17" > serverlog-18.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-4 "cd /home/ubuntu/run ; python startserver_async.py --task_index=18" > serverlog-19.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-4 "cd /home/ubuntu/run ; python startserver_async.py --task_index=19" > serverlog-20.out 2>&1&
 
-        nohup ssh ubuntu@vm-$GROUP_NUM-5 "cd /home/ubuntu/run ; python startserver.py --task_index=20" > serverlog-21.out 2>&1&
-        nohup ssh ubuntu@vm-$GROUP_NUM-5 "cd /home/ubuntu/run ; python startserver.py --task_index=21" > serverlog-22.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-5 "cd /home/ubuntu/run ; python startserver_async.py --task_index=20" > serverlog-21.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-5 "cd /home/ubuntu/run ; python startserver_async.py --task_index=21" > serverlog-22.out 2>&1&
     fi
 }
 

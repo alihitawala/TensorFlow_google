@@ -1,7 +1,7 @@
 ====================*************
 ===============
 -------------
-1480829353.89
+1480829353.86
 -------------
 Traceback (most recent call last):
   File "asynchronoussgd_distributed_optimized.py", line 151, in <module>

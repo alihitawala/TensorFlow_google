@@ -1,7 +1,14 @@
 I tensorflow/core/distributed_runtime/rpc/grpc_channel.cc:197] Initialize GrpcChannelCache for job worker -> {0 -> localhost:2222, 1 -> vm-8-2:2222, 2 -> vm-8-3:2222, 3 -> vm-8-4:2222, 4 -> vm-8-5:2222}
 I tensorflow/core/distributed_runtime/rpc/grpc_server_lib.cc:206] Started server with target: grpc://localhost:2222
-I tensorflow/core/distributed_runtime/master_session.cc:928] Start master session 0fd8ce0acca0dfad with config: 
+I tensorflow/core/distributed_runtime/master_session.cc:928] Start master session b61026ffa5473aba with config: 
 
-W tensorflow/core/kernels/queue_base.cc:294] _1_input_producer_5: Skipping cancelled enqueue attempt with queue not closed
-W tensorflow/core/kernels/queue_base.cc:294] _0_input_producer: Skipping cancelled enqueue attempt with queue not closed
-bash: line 1:  5897 Killed                  python startserver.py --task_index=0
+E tensorflow/core/distributed_runtime/master.cc:202] Master init: Unavailable: {"created":"@1480829353.862599057","description":"OS Error","errno":104,"file":"external/grpc/src/core/lib/iomgr/tcp_posix.c","file_line":229,"grpc_status":14,"os_error":"Connection reset by peer","syscall":"recvmsg"}
+I tensorflow/core/distributed_runtime/master_session.cc:928] Start master session 5a625c2fe2170ef4 with config: 
+
+I tensorflow/core/distributed_runtime/master_session.cc:845] DeregisterGraph error: Aborted: Graph handle is not found: . Possibly, this worker just restarted.
+I tensorflow/core/distributed_runtime/master_session.cc:845] DeregisterGraph error: Aborted: Graph handle is not found: . Possibly, this worker just restarted.
+I tensorflow/core/distributed_runtime/master_session.cc:928] Start master session 4e3948a684a60efa with config: 
+
+I tensorflow/core/distributed_runtime/master_session.cc:928] Start master session 4ee823ee67345e42 with config: 
+
+bash: line 1: 24651 Segmentation fault      (core dumped) python startserver_async.py --task_index=0

@@ -1,11 +1,17 @@
-Time taken for training iteration 0 at : vm-2 : 6.2479288578
-Time taken for training iteration 1 at : vm-2 : 4.83318996429
-Time taken for training iteration 2 at : vm-2 : 5.14820194244
-Time taken for training iteration 3 at : vm-2 : 5.57404994965
-Time taken for training iteration 4 at : vm-2 : 4.86088085175
-Time taken for training iteration 5 at : vm-2 : 5.0636920929
-Time taken for training iteration 6 at : vm-2 : 5.24815320969
-Time taken for training iteration 7 at : vm-2 : 5.50201892853
-Time taken for training iteration 8 at : vm-2 : 5.5513689518
-Time taken for training iteration 9 at : vm-2 : 4.54540681839
-Total time taken for 10 iterations :  at : vm-2 : 52.5754201412
+====================*************
+===============
+-------------
+1480829353.41
+-------------
+Traceback (most recent call last):
+  File "asynchronoussgd_distributed_optimized.py", line 151, in <module>
+    sess.run(assign_op)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 717, in run
+    run_metadata_ptr)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 915, in _run
+    feed_dict_string, options, run_metadata)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 965, in _do_run
+    target_list, options, run_metadata)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 985, in _do_call
+    raise type(e)(node_def, op, message)
+tensorflow.python.framework.errors.InvalidArgumentError: A session is not created yet....

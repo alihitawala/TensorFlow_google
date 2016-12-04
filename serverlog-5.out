@@ -1,5 +1,9 @@
 nohup: ignoring input
 I tensorflow/core/distributed_runtime/rpc/grpc_channel.cc:197] Initialize GrpcChannelCache for job worker -> {0 -> vm-8-1:2222, 1 -> vm-8-2:2222, 2 -> vm-8-3:2222, 3 -> vm-8-4:2222, 4 -> localhost:2222}
 I tensorflow/core/distributed_runtime/rpc/grpc_server_lib.cc:206] Started server with target: grpc://localhost:2222
-W tensorflow/core/kernels/queue_base.cc:294] _0_input_producer_4: Skipping cancelled enqueue attempt with queue not closed
-bash: line 1: 19443 Killed                  python startserver.py --task_index=4
+I tensorflow/core/distributed_runtime/master_session.cc:928] Start master session 1d76b0dce6c0a6d4 with config: 
+
+I tensorflow/core/distributed_runtime/master_session.cc:928] Start master session c1b3a385f03857e4 with config: 
+
+F tensorflow/core/distributed_runtime/graph_mgr.cc:55] 'unit.device' Must be non NULL
+bash: line 1: 24675 Aborted                 (core dumped) python startserver_async.py --task_index=4

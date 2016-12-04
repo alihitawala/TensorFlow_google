@@ -1,7 +1,11 @@
 ====================*************
+===============
+-------------
+1480829353.35
+-------------
 Traceback (most recent call last):
-  File "asynchronoussgd_distributed_optimized.py", line 131, in <module>
-    sess.run(tf.initialize_all_variables())
+  File "asynchronoussgd_distributed_optimized.py", line 151, in <module>
+    sess.run(assign_op)
   File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 717, in run
     run_metadata_ptr)
   File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 915, in _run
@@ -10,4 +14,4 @@ Traceback (most recent call last):
     target_list, options, run_metadata)
   File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 985, in _do_call
     raise type(e)(node_def, op, message)
-tensorflow.python.framework.errors.UnavailableError: {"created":"@1480829340.403993294","description":"EOF","file":"external/grpc/src/core/lib/iomgr/tcp_posix.c","file_line":235,"grpc_status":14}
+tensorflow.python.framework.errors.UnavailableError: {"created":"@1480829353.705986136","description":"OS Error","errno":104,"file":"external/grpc/src/core/lib/iomgr/tcp_posix.c","file_line":229,"grpc_status":14,"os_error":"Connection reset by peer","syscall":"recvmsg"}
