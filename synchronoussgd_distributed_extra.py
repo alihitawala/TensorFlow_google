@@ -9,11 +9,15 @@ BATCH_SIZE = 1000
 g = tf.Graph()
 data_dir = "./data/criteo-tfr-big"
 file_names = {
-    '0': [data_dir + '/tfrecords00'],
-    '1': [data_dir + '/tfrecords05'],
-    '2': [data_dir + '/tfrecords10'],
-    '3': [data_dir + '/tfrecords15'],
-    '4': [data_dir + '/tfrecords20']}
+    '0': [data_dir + '/tfrecords00', data_dir + '/tfrecords01', data_dir + '/tfrecords02', data_dir + '/tfrecords03',
+          data_dir + '/tfrecords04'],
+    '1': [data_dir + '/tfrecords05', data_dir + '/tfrecords06', data_dir + '/tfrecords07', data_dir + '/tfrecords08',
+          data_dir + '/tfrecords09'],
+    '2': [data_dir + '/tfrecords10', data_dir + '/tfrecords11', data_dir + '/tfrecords12', data_dir + '/tfrecords13',
+          data_dir + '/tfrecords14'],
+    '3': [data_dir + '/tfrecords15', data_dir + '/tfrecords16', data_dir + '/tfrecords17', data_dir + '/tfrecords18',
+          data_dir + '/tfrecords19'],
+    '4': [data_dir + '/tfrecords20', data_dir + '/tfrecords21']}
 # file_names = {
 #     '0': [data_dir + '/tfrecords00'],
 #     '1': [data_dir + '/tfrecords05'],
@@ -85,7 +89,11 @@ with g.as_default():
 
                 w_filtered = None
                 with tf.device("/job:worker/task:0"):
-                    w_filtered = tf.reshape(tf.gather(w, slice_index), [tf.shape(value)[1], 1])
+                    try:
+                        w_filtered = tf.reshape(tf.gather(w, slice_index), [tf.shape(value)[1], 1])
+                    except:
+                        print "Error occurred!"
+                        continue
 
                 x_filtered = tf.reshape(slice_value, [tf.shape(value)[1], 1])
                 gradient = tf.mul(
