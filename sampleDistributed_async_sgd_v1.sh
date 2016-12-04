@@ -2,7 +2,6 @@
 source tfdefs_async.sh
 start_cluster startserver_async.py
 
-sleep 20
 # start multiple clients
 nohup python asynchronoussgd_distributed_optimized.py --task_index=0 > asynclog-0.out 2>&1&
 sleep 10 # wait for variable to be initialized

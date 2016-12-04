@@ -81,7 +81,7 @@ with g.as_default():
 
     # Compute the gradient
     # dense_x = {}
-    with tf.device("/job:worker/task:%d" % (int(FLAGS.task_index)/5)):
+    with tf.device("/job:worker/task:%d" % (FLAGS.task_index)):
         label, index, value = get_next_row(file_names[str(FLAGS.task_index)])
         w_filtered = None
         with tf.device("/job:worker/task:0"):
@@ -124,7 +124,7 @@ with g.as_default():
         # sign_values = [sign_actual, sign_expected]
 
     # Create a session
-    with tf.Session("grpc://vm-8-%d:2222" % 1) as sess:
+    with tf.Session("grpc://vm-8-%d:2222" % (1)) as sess:
         print "====================*************"
         # only one client initializes the variable
         if FLAGS.task_index == 0:
@@ -135,7 +135,7 @@ with g.as_default():
         # Start the queue readers
         threads = tf.train.start_queue_runners(sess=sess, coord=coord)
         # Run n iterations
-        n = 10
+        n = 20
         e = 200
         count = 0
         try:
@@ -159,7 +159,7 @@ with g.as_default():
             #                 count+=1
             #         print "*********Mistakes: " + str(count), str(e) + "**********"
             #         print "Time in calculating mistakes on test set: " + str(time.time() - start)
-            print "Total time taken for " + str(n) + " iterations : " + " at : vm-" + str(FLAGS.task_index+1) + " : " + str(time.time() - start_total)
+            print "Total time taken for " + str(n) + " iterations : " + " at : vm-" + str(int(FLAGS.task_index)/5+1) + " : " + str(time.time() - start_total)
         except tf.errors.OutOfRangeError:
             print('Done training -- epoch limit reached')
         finally:  # When done, ask the threads to stop.
