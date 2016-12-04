@@ -21,8 +21,8 @@ time_taken=`expr $ed - $st`
 echo $time_taken
 # defined in tfdefs.sh to terminate the cluster
 terminate_cluster
-
-# Under the "GRAPHS" tab, use the options on the left to navigate to the "Run" you are interested in.
-tensorboard --logdir=$TF_LOG_DIR
+#
+## Under the "GRAPHS" tab, use the options on the left to navigate to the "Run" you are interested in.
+#tensorboard --logdir=$TF_LOG_DIR
 
 
