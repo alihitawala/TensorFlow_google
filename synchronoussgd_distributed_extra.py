@@ -155,7 +155,7 @@ with g.as_default():
                 start = time.time()
                 sess.run(assign_op)
                 print "Time taken for training iteration " + str(i) + ": " + str(time.time() - start)
-                if i % ep == 0:
+                if (i+1) % ep == 0:
                     start = time.time()
                     count = 0
                     for j in range(0,e):
