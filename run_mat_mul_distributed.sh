@@ -10,7 +10,7 @@ export TF_LOG_DIR="/home/ubuntu/tf/logs"
 start_cluster startserver.py
 
 
-echo "Executing the distributed tensorflow job from exampleDistributed.py"
+echo "Executing the distributed Matrix multiplication with d = " $1
 # testdistributed.py is a client that can run jobs on the cluster.
 # please read testdistributed.py to understand the steps defining a Graph and
 # launch a session to run the Graph
