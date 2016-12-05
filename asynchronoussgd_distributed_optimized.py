@@ -103,7 +103,7 @@ with g.as_default():
     # Create a model
     with tf.device("/job:worker/task:0"):
         w = tf.Variable(tf.random_uniform([num_features, 1]), name="model")
-        counter = tf.Variable(tf.ones([1], dtype=tf.int64), name="counter")
+        counter = tf.Variable(tf.zeros([1], dtype=tf.int64), name="counter")
 
     # Compute the gradient
     # dense_x = {}
@@ -166,7 +166,7 @@ with g.as_default():
                 sess.run(assign_op)
                 print "Time taken for training iteration " + str(i)  + " : " + str(time.time() - start)
                 c = counter.eval()
-                if ((i+1) % ep == 0 and ERROR_RUN_ON[int(i/ep)] == int(FLAGS.task_index)) or (c[0] >= n*NUM_WORKER-1):
+                if ((i+1) % ep == 0 and ERROR_RUN_ON[int(i/ep)] == int(FLAGS.task_index)) or (c[0] == n*NUM_WORKER):
                     # in 10th session running on vm-1 but actual iteration depends on vm-3
                     start = time.time()
                     count = 0
