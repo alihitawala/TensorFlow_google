@@ -144,7 +144,7 @@ with g.as_default():
         # Start the queue readers
         tf.train.start_queue_runners(sess=sess)
         # Run n iterations
-        n = 1000
+        n = 2000
         ep = 100
         e = 20000
         count = 0
