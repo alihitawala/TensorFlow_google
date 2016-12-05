@@ -68,6 +68,7 @@ file_names = {
     '18': [data_dir + '/tfrecords04'],
     '19': [data_dir + '/tfrecords09'],
 }
+NUM_WORKER = 20
 ERROR_RUN_ON = [5,6,7,8,9,10,11,12,13,14,15]
 test_file_names = [data_dir + '/tfrecords22']
 
@@ -164,10 +165,10 @@ with g.as_default():
                 start = time.time()
                 sess.run(assign_op)
                 print "Time taken for training iteration " + str(i)  + " : " + str(time.time() - start)
-                if (i+1) % ep == 0 and ERROR_RUN_ON[int(i/ep)] == int(FLAGS.task_index):
+                c = counter.eval()
+                if (i+1) % ep == 0 and ERROR_RUN_ON[int(i/ep)] == int(FLAGS.task_index) or ((i+1) == n and c[0] == n*NUM_WORKER):
                     # in 10th session running on vm-1 but actual iteration depends on vm-3
                     start = time.time()
-                    c = counter.eval()
                     count = 0
                     for j in range(0, e):
                         output_sign = sess.run(sign_values)
