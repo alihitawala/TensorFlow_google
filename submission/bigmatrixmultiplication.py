@@ -1,8 +1,8 @@
 """
-A solution to finding trace of square of a large matrix using a single device.
-We are able to circumvent OOM errors, by generating sub-matrices. TensorFlow
-runtime, is able to schedule computation on small sub-matrices without
-overflowing the available RAM.
+A solution to finding trace of square of a large matrix using multiple devices.
+
+Implementation decision - locate the trace appropriately. if (i,j) is on device p put (j,i) on p as well.
+Also distribute the traces evenly across devices.
 """
 
 import tensorflow as tf
@@ -49,6 +49,7 @@ d = 40 # int(sys.argv[1])  # number of splits along one dimension. Thus, we will
 # print "value of d is: ", d
 M = int(N / d)
 
+# number of blocks per machine in even distribution
 BLOCKS_PER_MACHINE = int(d * d / 5)
 
 
@@ -64,7 +65,7 @@ def create_cache():
                 current_machine += 1
             getMachineId(i, j, current_machine)
 
-
+# create machine mapping map for (i,j) trace to machine m
 create_cache()
 tf.logging.set_verbosity(tf.logging.DEBUG)
 tf.set_random_seed(1024)
