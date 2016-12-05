@@ -4,21 +4,26 @@ import time
 
 # Number of features
 num_features = 33762578
-BATCH_SIZE = 1000
+BATCH_SIZE = 10000
 
 g = tf.Graph()
 data_dir = "./data/criteo-tfr-big"
-file_names = {
-    '0': [data_dir + '/tfrecords01'],
-    '1': [data_dir + '/tfrecords06'],
-    '2': [data_dir + '/tfrecords11'],
-    '3': [data_dir + '/tfrecords16'],
-    '4': [data_dir + '/tfrecords21']}
 # file_names = {
-#     '0': [data_dir + '/tfrecords00'],
-#     '1': [data_dir + '/tfrecords05'],
-#     '2': [data_dir + '/tfrecords10'],
-#     '3': [data_dir + '/tfrecords15'], '4': [data_dir + '/tfrecords20']}
+#     '0': [data_dir + '/tfrecords01'],
+#     '1': [data_dir + '/tfrecords06'],
+#     '2': [data_dir + '/tfrecords11'],
+#     '3': [data_dir + '/tfrecords16'],
+#     '4': [data_dir + '/tfrecords21']}
+file_names = {
+    '0': [data_dir + '/tfrecords00', data_dir + '/tfrecords01', data_dir + '/tfrecords02', data_dir + '/tfrecords03',
+          data_dir + '/tfrecords04'],
+    '1': [data_dir + '/tfrecords05', data_dir + '/tfrecords06', data_dir + '/tfrecords07', data_dir + '/tfrecords08',
+          data_dir + '/tfrecords09'],
+    '2': [data_dir + '/tfrecords10', data_dir + '/tfrecords11', data_dir + '/tfrecords12', data_dir + '/tfrecords13',
+          data_dir + '/tfrecords14'],
+    '3': [data_dir + '/tfrecords15', data_dir + '/tfrecords16', data_dir + '/tfrecords17', data_dir + '/tfrecords18',
+          data_dir + '/tfrecords19'],
+    '4': [data_dir + '/tfrecords20', data_dir + '/tfrecords21']}
 test_file_names = [data_dir + '/tfrecords22']
 
 def get_next_batch(file_names):
@@ -144,18 +149,18 @@ with g.as_default():
         # Start the queue readers
         tf.train.start_queue_runners(sess=sess)
         # Run n iterations
-        n = 2000
+        n = 1000
         ep = 100
         e = 20000
         count = 0
         try:
             start_total = time.time()
             print "Batch size for this run is :: " + str(BATCH_SIZE)
-            for i in range(0, n):
+            for i in range(1, n+1):
                 start = time.time()
                 sess.run(assign_op)
                 print "Time taken for training iteration " + str(i) + ": " + str(time.time() - start)
-                if (i+1) % ep == 0:
+                if i % ep == 0:
                     start = time.time()
                     count = 0
                     for j in range(0,e):
