@@ -70,7 +70,7 @@ file_names = {
     '20': [data_dir + '/tfrecords20'],
     '21': [data_dir + '/tfrecords21'],
 }
-
+ERROR_RUN_ON = [5,6,7,8,9,10,11,12,13,14,15]
 test_file_names = [data_dir + '/tfrecords22']
 
 
@@ -156,7 +156,7 @@ with g.as_default():
         # Start the queue readers
         threads = tf.train.start_queue_runners(sess=sess, coord=coord)
         # Run n iterations
-        n = 10
+        n = 30
         ep = 3
         e = 20000
         count = 0
@@ -166,7 +166,7 @@ with g.as_default():
                 start = time.time()
                 sess.run(assign_op)
                 print "Time taken for training iteration " + str(i)  + " : " + str(time.time() - start)
-                if (i+1) % ep == 0 and int(FLAGS.task_index) == 10 and False:
+                if (i+1) % ep == 0 and ERROR_RUN_ON[int(i/ep)] == int(FLAGS.task_index):
                     # in 10th session running on vm-1 but actual iteration depends on vm-3
                     start = time.time()
                     c = counter.eval()
@@ -175,7 +175,7 @@ with g.as_default():
                         output_sign = sess.run(sign_values)
                         if output_sign[0] != output_sign[1]:
                             count+=1
-                    print "*********Mistakes after iterations : "+ str(c[0]) +" :" + str(count), str(e) + "**********"
+                    print "*********Mistakes after updates : "+ str(c[0]) +" :" + str(count), str(e) + "**********"
                     print "Time in calculating mistakes on test set: " + str(time.time() - start)
             print "Total time taken for " + str(n) + " iterations  : " + str(time.time() - start_total)
         except tf.errors.OutOfRangeError:
