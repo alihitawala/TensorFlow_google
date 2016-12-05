@@ -9,11 +9,11 @@ BATCH_SIZE = 1000
 g = tf.Graph()
 data_dir = "./data/criteo-tfr-big"
 file_names = {
-    '0': [data_dir + '/tfrecords00'],
-    '1': [data_dir + '/tfrecords05'],
-    '2': [data_dir + '/tfrecords10'],
-    '3': [data_dir + '/tfrecords15'],
-    '4': [data_dir + '/tfrecords20']}
+    '0': [data_dir + '/tfrecords01'],
+    '1': [data_dir + '/tfrecords06'],
+    '2': [data_dir + '/tfrecords11'],
+    '3': [data_dir + '/tfrecords16'],
+    '4': [data_dir + '/tfrecords21']}
 # file_names = {
 #     '0': [data_dir + '/tfrecords00'],
 #     '1': [data_dir + '/tfrecords05'],
