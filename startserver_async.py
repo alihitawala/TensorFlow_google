@@ -18,24 +18,26 @@ clusterSpec = tf.train.ClusterSpec({
         "vm-%d-1:2223" % GROUP_NUM,
         "vm-%d-1:2224" % GROUP_NUM,
         "vm-%d-1:2225" % GROUP_NUM,
-        "vm-%d-1:2226" % GROUP_NUM,
+
         "vm-%d-2:2222" % GROUP_NUM,
         "vm-%d-2:2223" % GROUP_NUM,
         "vm-%d-2:2224" % GROUP_NUM,
         "vm-%d-2:2225" % GROUP_NUM,
-        "vm-%d-2:2226" % GROUP_NUM,
+
         "vm-%d-3:2222" % GROUP_NUM,
         "vm-%d-3:2223" % GROUP_NUM,
         "vm-%d-3:2224" % GROUP_NUM,
         "vm-%d-3:2225" % GROUP_NUM,
-        "vm-%d-3:2226" % GROUP_NUM,
+
         "vm-%d-4:2222" % GROUP_NUM,
         "vm-%d-4:2223" % GROUP_NUM,
         "vm-%d-4:2224" % GROUP_NUM,
         "vm-%d-4:2225" % GROUP_NUM,
-        "vm-%d-4:2226" % GROUP_NUM,
+
         "vm-%d-5:2222" % GROUP_NUM,
-        "vm-%d-5:2223" % GROUP_NUM
+        "vm-%d-5:2223" % GROUP_NUM,
+        "vm-%d-5:2224" % GROUP_NUM,
+        "vm-%d-5:2225" % GROUP_NUM
        ]
 })
 

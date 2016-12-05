@@ -51,24 +51,22 @@ file_names = {
     '1': [data_dir + '/tfrecords01'],
     '2': [data_dir + '/tfrecords02'],
     '3': [data_dir + '/tfrecords03'],
-    '4': [data_dir + '/tfrecords04'],
-    '5': [data_dir + '/tfrecords05'],
-    '6': [data_dir + '/tfrecords06'],
-    '7': [data_dir + '/tfrecords07'],
-    '8': [data_dir + '/tfrecords08'],
-    '9': [data_dir + '/tfrecords09'],
-    '10': [data_dir + '/tfrecords10'],
-    '11': [data_dir + '/tfrecords11'],
-    '12': [data_dir + '/tfrecords12'],
-    '13': [data_dir + '/tfrecords13'],
-    '14': [data_dir + '/tfrecords14'],
-    '15': [data_dir + '/tfrecords15'],
-    '16': [data_dir + '/tfrecords16'],
-    '17': [data_dir + '/tfrecords17'],
-    '18': [data_dir + '/tfrecords18'],
-    '19': [data_dir + '/tfrecords19'],
-    '20': [data_dir + '/tfrecords20'],
-    '21': [data_dir + '/tfrecords21'],
+    '4': [data_dir + '/tfrecords05'],
+    '5': [data_dir + '/tfrecords06'],
+    '6': [data_dir + '/tfrecords07'],
+    '7': [data_dir + '/tfrecords08'],
+    '8': [data_dir + '/tfrecords10'],
+    '9': [data_dir + '/tfrecords11'],
+    '10': [data_dir + '/tfrecords12'],
+    '11': [data_dir + '/tfrecords13'],
+    '12': [data_dir + '/tfrecords15'],
+    '13': [data_dir + '/tfrecords16'],
+    '14': [data_dir + '/tfrecords17'],
+    '15': [data_dir + '/tfrecords18'],
+    '16': [data_dir + '/tfrecords20'],
+    '17': [data_dir + '/tfrecords21'],
+    '18': [data_dir + '/tfrecords04'],
+    '19': [data_dir + '/tfrecords09'],
 }
 ERROR_RUN_ON = [5,6,7,8,9,10,11,12,13,14,15]
 test_file_names = [data_dir + '/tfrecords22']
@@ -156,8 +154,8 @@ with g.as_default():
         # Start the queue readers
         threads = tf.train.start_queue_runners(sess=sess, coord=coord)
         # Run n iterations
-        n = 3000
-        ep = 300
+        n = 30
+        ep = 3
         e = 20000
         count = 0
         try:

@@ -24,5 +24,3 @@ nohup python asynchronoussgd_distributed_optimized.py --task_index=16 > asynclog
 nohup python asynchronoussgd_distributed_optimized.py --task_index=17 > asynclog-17.out 2>&1&
 nohup python asynchronoussgd_distributed_optimized.py --task_index=18 > asynclog-18.out 2>&1&
 nohup python asynchronoussgd_distributed_optimized.py --task_index=19 > asynclog-19.out 2>&1&
-nohup python asynchronoussgd_distributed_optimized.py --task_index=20 > asynclog-20.out 2>&1&
-nohup python asynchronoussgd_distributed_optimized.py --task_index=21 > asynclog-21.out 2>&1&
