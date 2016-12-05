@@ -55,6 +55,8 @@ function start_cluster() {
 
         nohup ssh ubuntu@vm-$GROUP_NUM-5 "cd /home/ubuntu/run ; python startserver_sync.py --task_index=16" > serverlog-17.out 2>&1&
         nohup ssh ubuntu@vm-$GROUP_NUM-5 "cd /home/ubuntu/run ; python startserver_sync.py --task_index=17" > serverlog-18.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-5 "cd /home/ubuntu/run ; python startserver_sync.py --task_index=18" > serverlog-19.out 2>&1&
+        nohup ssh ubuntu@vm-$GROUP_NUM-5 "cd /home/ubuntu/run ; python startserver_sync.py --task_index=19" > serverlog-20.out 2>&1&
     fi
 }
 

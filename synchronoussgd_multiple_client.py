@@ -41,9 +41,12 @@ file_names = {
     '14': [data_dir + '/tfrecords17'],
     '15': [data_dir + '/tfrecords18'],
 
-    '16': [data_dir + '/tfrecords20'],
-    '17': [data_dir + '/tfrecords21'],
+    '16': [data_dir + '/tfrecords04'],
+    '17': [data_dir + '/tfrecords09'],
+    '18': [data_dir + '/tfrecords20'],
+    '19': [data_dir + '/tfrecords21'],
 }
+NUM_WORKERS = 20
 test_file_names = [data_dir + '/tfrecords22']
 
 def get_next_row(file_names):
@@ -81,7 +84,7 @@ with g.as_default():
     # Compute the gradient
     gradients = []
     # dense_x = {}
-    for i in range(0, 18):
+    for i in range(0, NUM_WORKERS):
         with tf.device("/job:worker/task:%d" % i):
             label, index, value = get_next_row(file_names[str(i)])
             w_filtered = None
@@ -113,7 +116,7 @@ with g.as_default():
     with tf.device("/job:worker/task:0"):
         # sparse_0 = tf.SparseTensor(indices=gradients[0][1].values, values=gradients[0][0], shape=[num_features, 1])
         total_gradient = tf.sparse_add(gradients[0], gradients[1])
-        for i in range(2,18) :
+        for i in range(2, NUM_WORKERS) :
             total_gradient = tf.sparse_add(total_gradient, gradients[i])
         total_values = total_gradient.values
         index_total = tf.reshape(total_gradient.indices, shape=tf.shape(total_values))
