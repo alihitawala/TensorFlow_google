@@ -20,6 +20,32 @@ data_dir = "./data/criteo-tfr-big"
 #      '3': [data_dir + '/tfrecords15', data_dir + '/tfrecords16', data_dir + '/tfrecords17', data_dir + '/tfrecords18',
 #            data_dir + '/tfrecords19'], '4': [data_dir + '/tfrecords20', data_dir + '/tfrecords21']}
 
+GROUP_NUM=8
+workers = {
+    '0': "vm-%d-1:2222" % GROUP_NUM,
+    '1': "vm-%d-1:2223" % GROUP_NUM,
+    '2': "vm-%d-1:2224" % GROUP_NUM,
+    '3': "vm-%d-1:2225" % GROUP_NUM,
+    '4': "vm-%d-1:2226" % GROUP_NUM,
+    '5': "vm-%d-2:2222" % GROUP_NUM,
+    '6': "vm-%d-2:2223" % GROUP_NUM,
+    '7': "vm-%d-2:2224" % GROUP_NUM,
+    '8': "vm-%d-2:2225" % GROUP_NUM,
+    '9': "vm-%d-2:2226" % GROUP_NUM,
+    '10': "vm-%d-3:2222" % GROUP_NUM,
+    '11': "vm-%d-3:2223" % GROUP_NUM,
+    '12': "vm-%d-3:2224" % GROUP_NUM,
+    '13': "vm-%d-3:2225" % GROUP_NUM,
+    '14': "vm-%d-3:2226" % GROUP_NUM,
+    '15': "vm-%d-4:2222" % GROUP_NUM,
+    '16': "vm-%d-4:2223" % GROUP_NUM,
+    '17': "vm-%d-4:2224" % GROUP_NUM,
+    '18': "vm-%d-4:2225" % GROUP_NUM,
+    '19': "vm-%d-4:2226" % GROUP_NUM,
+    '20': "vm-%d-5:2222" % GROUP_NUM,
+    '21': "vm-%d-5:2223" % GROUP_NUM
+}
+
 file_names = {
     '0': [data_dir + '/tfrecords00'],
     '1': [data_dir + '/tfrecords01'],
@@ -119,7 +145,7 @@ with g.as_default():
         sign_values = [sign_actual, sign_expected]
 
     # Create a session
-    with tf.Session("grpc://vm-8-%d:2222" % 1) as sess:
+    with tf.Session("grpc://vm-8-1:2222") as sess: #+ str(workers[str(FLAGS.task_index)])) as sess:
         print "====================*************"
         # only one client initializes the variable
         if FLAGS.task_index == 0:
@@ -140,7 +166,7 @@ with g.as_default():
                 start = time.time()
                 sess.run(assign_op)
                 print "Time taken for training iteration " + str(i)  + " : " + str(time.time() - start)
-                if (i+1) % ep == 0 and FLAGS.task_index == '10':
+                if (i+1) % ep == 0 and int(FLAGS.task_index) == 10 and False:
                     # in 10th session running on vm-1 but actual iteration depends on vm-3
                     start = time.time()
                     c = counter.eval()
