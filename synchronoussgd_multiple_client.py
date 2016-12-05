@@ -140,8 +140,8 @@ with g.as_default():
         # Start the queue readers
         tf.train.start_queue_runners(sess=sess)
         # Run n iterations
-        n = 10
-        e = 200000
+        n = 10000
+        e = 100000
         ep = 1000
         count = 0
         try:
@@ -151,7 +151,7 @@ with g.as_default():
                 start = time.time()
                 sess.run(assign_op)
                 print "Time taken for training iteration " + str(i) + ": " + str(time.time() - start)
-                if (i+1) % ep == 0:
+                if i % ep == 0:
                     start = time.time()
                     count = 0
                     for j in range(0,e):
