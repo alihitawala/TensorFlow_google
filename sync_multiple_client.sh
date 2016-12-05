@@ -7,7 +7,7 @@ source tfdefs_sync.sh
 # startserver.py has the specifications for the cluster.
 start_cluster startserver_sync.py
 
-echo "Executing the distributed tensorflow synchronous optimized synchronoussgd_distributed_optimized.py"
+echo "Executing the distributed synchronous sgd with multiple client per worker"
 #nohup ssh ubuntu@vm-8-1 "rm ~/output/* ; dstat --output ~/output/sync_stats.csv -cdn" &
 #nohup ssh ubuntu@vm-8-2 "rm ~/output/* ; dstat --output ~/output/sync_stats.csv -cdn" &
 #nohup ssh ubuntu@vm-8-3 "rm ~/output/* ; dstat --output ~/output/sync_stats.csv -cdn" &
