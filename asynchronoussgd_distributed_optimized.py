@@ -166,7 +166,7 @@ with g.as_default():
                 sess.run(assign_op)
                 print "Time taken for training iteration " + str(i)  + " : " + str(time.time() - start)
                 c = counter.eval()
-                if ((i+1) % ep == 0 and ERROR_RUN_ON[int(i/ep)] == int(FLAGS.task_index)) or ((i+1) == n and c[0] == n*NUM_WORKER):
+                if ((i+1) % ep == 0 and ERROR_RUN_ON[int(i/ep)] == int(FLAGS.task_index)) or (c[0] > n*NUM_WORKER-1):
                     # in 10th session running on vm-1 but actual iteration depends on vm-3
                     start = time.time()
                     count = 0
