@@ -116,7 +116,7 @@ with g.as_default():
         coord = tf.train.Coordinator()
         threads = tf.train.start_queue_runners(sess=sess, coord=coord)
         # Run n iterations
-        n = 3000 # number of iterations
+        n = 10 # number of iterations
         e = 30000 # test examples to read for testing the model
         ep = 300 # after how many iterations should test be run
         count = 0

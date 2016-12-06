@@ -132,7 +132,7 @@ with g.as_default():
         # Start the queue readers
         tf.train.start_queue_runners(sess=sess)
         # Run n iterations
-        n = 10000 # number of iterations
+        n = 10 # number of iterations
         e = 100000 # test examples to read for testing the model
         ep = 1000 # after how many iterations should test be run
         count = 0

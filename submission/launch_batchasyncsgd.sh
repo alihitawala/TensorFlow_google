@@ -1,6 +1,6 @@
 #!/bin/bash
-source tfdefs_async.sh # this file is different from the one given originally - check grader folder for differences
-start_cluster startserver_async.py # this file is different from the one given originally - check grader folder for differences
+source tfdefs_multiple.sh # this file is different from the one given originally - check grader folder for differences
+start_cluster startserver_multiple.py # this file is different from the one given originally - check grader folder for differences
 
 # start multiple clients
 nohup python batchasyncsgd.py --task_index=0 > batchasynclog-0.out 2>&1&
