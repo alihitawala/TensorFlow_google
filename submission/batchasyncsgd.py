@@ -151,6 +151,7 @@ with g.as_default():
         ep = 1000 # after how many iterations should test be run
         e = 20000 # test examples to read for testing the model
         count = 0
+        calculate_error = False
         try:
             start_total = time.time()
             for i in range(0, n):
@@ -158,7 +159,7 @@ with g.as_default():
                 sess.run(assign_op)
                 print "Time taken for training iteration " + str(i)  + " : " + str(time.time() - start)
                 c = counter.eval()
-                if ((i+1) % ep == 0 and ERROR_RUN_ON[int(i/ep)] == int(FLAGS.task_index)) or (c[0] == n*NUM_WORKER):
+                if calculate_error and (((i+1) % ep == 0 and ERROR_RUN_ON[int(i/ep)] == int(FLAGS.task_index)) or (c[0] == n*NUM_WORKER)):
                     # in 10th session running on vm-1 but actual iteration depends on vm-3
                     start = time.time()
                     count = 0
