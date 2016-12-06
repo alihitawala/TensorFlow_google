@@ -109,7 +109,7 @@ with g.as_default():
         sign_values = [sign_actual, sign_expected]
 
     # Create a session - the reason for this is explained in the comments at the start of this file
-    with tf.Session("grpc://vm-8-%d:2222" % (int(int(FLAGS.task_index)/4)+1)) as sess: #+ str(workers[str(FLAGS.task_index)])) as sess:
+    with tf.Session("grpc://vm-8-1:2222") as sess: # (int(int(FLAGS.task_index)/4)+1)) ->this is slow overall
         # only one client initializes the variable
         if FLAGS.task_index == 0:
             sess.run(tf.initialize_all_variables())
