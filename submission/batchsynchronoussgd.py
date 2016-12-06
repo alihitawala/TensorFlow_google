@@ -3,6 +3,7 @@ import time
 
 # Number of features
 num_features = 33762578
+learning_rate = -0.01
 BATCH_SIZE = 100
 
 g = tf.Graph()
@@ -51,11 +52,6 @@ def get_next_row(file_names):
     value = features['value']
     return label, index, value
 
-def get_dense_x(index, value):
-    dense_x = tf.sparse_to_dense(tf.sparse_tensor_to_dense(index),
-            [num_features],
-            tf.sparse_tensor_to_dense(value))
-    return tf.reshape(dense_x, [num_features, 1])
 tf.set_random_seed(1024)
 
 with g.as_default():
@@ -120,12 +116,11 @@ with g.as_default():
                     gradients[4])
         total_gradient_index_shape = tf.shape(grand_total_gradients.indices)[0]
         total_gradient_index = tf.reshape(grand_total_gradients.indices, shape=[total_gradient_index_shape])
-        total_gradient_value = tf.reshape(tf.mul(grand_total_gradients.values, -0.01), shape=[total_gradient_index_shape, 1])
+        total_gradient_value = tf.reshape(tf.mul(grand_total_gradients.values, learning_rate), shape=[total_gradient_index_shape, 1])
         assign_op = tf.scatter_add(w, total_gradient_index, total_gradient_value)
 
         # testing
         test_label, test_index, test_value = get_next_row(test_file_names)
-        # test_dense_x = get_dense_x(test_index, test_value)
         test_w_filtered = tf.gather(w, test_index.values)
         test_x_filtered = tf.convert_to_tensor(test_value.values, dtype=tf.float32)
         test_x_filtered = tf.reshape(test_x_filtered, [tf.shape(test_value)[0], 1])

@@ -14,6 +14,7 @@ tf.app.flags.DEFINE_integer("task_index", 0, "Index of the worker task")
 FLAGS = tf.app.flags.FLAGS
 # Number of features
 num_features = 33762578
+learning_rate = -0.01
 
 g = tf.Graph()
 
@@ -93,7 +94,7 @@ with g.as_default():
                         )
                     ) - 1)
                 ), x_filtered)
-        local_gradient = tf.reshape(tf.mul(tf.reshape(local_gradient, tf.shape(value)), -0.01), [tf.shape(value)[0], 1])
+        local_gradient = tf.reshape(tf.mul(tf.reshape(local_gradient, tf.shape(value)), learning_rate), [tf.shape(value)[0], 1])
 
     with tf.device("/job:worker/task:0"):
         counter_add_op = counter.assign_add([1])

@@ -5,6 +5,7 @@ tf.app.flags.DEFINE_integer("task_index", 0, "Index of the worker task")
 FLAGS = tf.app.flags.FLAGS
 # Number of features
 num_features = 33762578
+learning_rate = -0.01
 BATCH_SIZE = 100
 
 g = tf.Graph()
@@ -123,7 +124,7 @@ with g.as_default():
         counter_add_op = counter.assign_add([1])
         total_gradient_index_shape = tf.shape(total_gradient.indices)[0]
         total_gradient_index = tf.reshape(total_gradient.indices, shape=[total_gradient_index_shape])
-        total_gradient_value = tf.reshape(tf.mul(total_gradient.values, -0.01), shape=[total_gradient_index_shape, 1])
+        total_gradient_value = tf.reshape(tf.mul(total_gradient.values, learning_rate), shape=[total_gradient_index_shape, 1])
         assign_op = [tf.scatter_add(w, total_gradient_index, total_gradient_value), counter_add_op]
 
         # testing
