@@ -1,0 +1,10 @@
+Running synchronous distributed (5 workers)
+    eta = 0.1
+    errors = 200000
+    iteration = 10000 * 5
+
+Running extra synchronous distributed (5 workers)
+    eta = 0.1
+    errors = 200000
+    iteration = 10000 * 5
+    Batch size = 1000

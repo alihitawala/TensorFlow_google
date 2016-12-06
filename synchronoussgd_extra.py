@@ -8,7 +8,7 @@ BATCH_SIZE = 1000
 
 g = tf.Graph()
 data_dir = "./data/criteo-tfr-big"
-file_names = [data_dir + '/tfrecords00']
+file_names = [data_dir + '/tfrecords20']
 # file_names = [data_dir + '/tfrecords00', data_dir + '/tfrecords01', data_dir + '/tfrecords02']
 test_file_names = [data_dir + '/tfrecords22']
 
@@ -123,6 +123,7 @@ with g.as_default():
     try:
         start_total = time.time()
         start = time.time()
+        print "Batch size for this run is :: " + str(BATCH_SIZE)
         for i in range(0, n):
             sess.run(update_model)
             if i%ep == 0:

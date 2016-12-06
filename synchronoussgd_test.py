@@ -24,10 +24,11 @@ def get_dense_x(file_names):
     label = features['label']
     index = features['index']
     value = features['value']
-    dense_x = tf.sparse_to_dense(tf.sparse_tensor_to_dense(index),
-            [num_features],
-            tf.sparse_tensor_to_dense(value))
-    return tf.reshape(dense_x, [num_features, 1]), label
+    # dense_x = tf.sparse_to_dense(tf.sparse_tensor_to_dense(index),
+    #         [num_features],
+    #         tf.sparse_tensor_to_dense(value))
+    # return tf.reshape(dense_x, [num_features, 1]), label
+    return value, label
 
 with g.as_default():
     dense_x, label = get_dense_x(file_names)
@@ -37,21 +38,23 @@ with g.as_default():
     # Compute the gradient
     gradient = tf.Variable(tf.ones([num_features, 1]), dtype=tf.float32)
     # gradient = tf.mul(tf.mul(label, tf.sigmoid(tf.mul(label, tf.matmul(tf.transpose(w), dense_feature) - 1))), value)
-    gradient = gradient.assign(tf.mul(
+    left = tf.mul(
+                tf.cast(label, tf.float32),
+                (tf.sigmoid(
                     tf.mul(
                         tf.cast(label, tf.float32),
-                        (tf.sigmoid(
-                            tf.mul(
-                                tf.cast(label, tf.float32),
-                                (
-                                    tf.matmul(
-                                        tf.transpose(w),
-                                        dense_x
-                                    )
-                                )
-                            )
-                        ) - 1)
-                    ), dense_x))
+                        (
+                            tf.sparse_reduce_sum(tf.SparseTensor.__mul__(dense_x,w))
+                            # tf.sparse_tensor_dense_matmul(
+                            #     dense_x,
+                            #     w
+                            # )
+                        )
+                    )
+                ) - 1)
+            )
+    left = tf.reshape(left, [1,1])
+    gradient = tf.sparse_tensor_dense_matmul(dense_x, left)
     zero = tf.constant(0, dtype=tf.float32)
     where = tf.not_equal(gradient, zero)
     indices = tf.where(where)

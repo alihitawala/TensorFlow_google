@@ -1,19 +1,12 @@
 import tensorflow as tf
 import time
-## TODO enhancement tf.sparse_tensor_dense_matmul(...)
 
 # Number of features
 num_features = 33762578
-BATCH_SIZE = 10000
+BATCH_SIZE = 100
 
 g = tf.Graph()
 data_dir = "./data/criteo-tfr-big"
-# file_names = {
-#     '0': [data_dir + '/tfrecords01'],
-#     '1': [data_dir + '/tfrecords06'],
-#     '2': [data_dir + '/tfrecords11'],
-#     '3': [data_dir + '/tfrecords16'],
-#     '4': [data_dir + '/tfrecords21']}
 file_names = {
     '0': [data_dir + '/tfrecords00', data_dir + '/tfrecords01', data_dir + '/tfrecords02', data_dir + '/tfrecords03',
           data_dir + '/tfrecords04'],
@@ -149,8 +142,8 @@ with g.as_default():
         # Start the queue readers
         tf.train.start_queue_runners(sess=sess)
         # Run n iterations
-        n = 1000
-        ep = 100
+        n = 10000
+        ep = 1000
         e = 20000
         count = 0
         try:

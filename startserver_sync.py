@@ -37,7 +37,7 @@ clusterSpec = tf.train.ClusterSpec({
         "vm-%d-5:2222" % GROUP_NUM,
         "vm-%d-5:2223" % GROUP_NUM,
         "vm-%d-5:2224" % GROUP_NUM,
-        "vm-%d-5:2225" % GROUP_NUM,
+        "vm-%d-5:2225" % GROUP_NUM
        ]
 })
 

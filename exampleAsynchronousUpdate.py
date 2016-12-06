@@ -32,7 +32,7 @@ with g.as_default():
         # only one client initializes the variable
         if FLAGS.task_index == 0:
             sess.run(tf.initialize_all_variables())
-        for i in range(0, 1000):
+        for i in range(0, 10):
             sess.run(assign_op)
             print w.eval()
         sess.close()

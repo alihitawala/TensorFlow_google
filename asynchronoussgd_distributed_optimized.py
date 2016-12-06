@@ -1,6 +1,14 @@
 import tensorflow as tf
 import time
+"""
+    This is the asynchronous implementation of the SGD
+    Number of clients invoked for this implementation is 20 (4 per worker). This was done to get more parallelism.
+    Iteration time is about 5 sec implies = 0.25 sec to get update from one training example.
 
+    ** Implementation Decision - As you can see all the sessions were invoked on vm-1 at task port '0' this was done to
+    reduce the network traffic and also we observed that the vm-1 has a lot of CPU bandwidth to initiate all the
+    sessions.
+"""
 tf.app.flags.DEFINE_integer("task_index", 0, "Index of the worker task")
 FLAGS = tf.app.flags.FLAGS
 # Number of features
@@ -10,42 +18,6 @@ g = tf.Graph()
 
 # Get the list of all files in the input data directory
 data_dir = "./data/criteo-tfr-big"
-# file_names = {
-#      '0': [data_dir + '/tfrecords00', data_dir + '/tfrecords01', data_dir + '/tfrecords02', data_dir + '/tfrecords03',
-#            data_dir + '/tfrecords04'],
-#      '1': [data_dir + '/tfrecords05', data_dir + '/tfrecords06', data_dir + '/tfrecords07', data_dir + '/tfrecords08',
-#            data_dir + '/tfrecords09'],
-#      '2': [data_dir + '/tfrecords10', data_dir + '/tfrecords11', data_dir + '/tfrecords12', data_dir + '/tfrecords13',
-#            data_dir + '/tfrecords14'],
-#      '3': [data_dir + '/tfrecords15', data_dir + '/tfrecords16', data_dir + '/tfrecords17', data_dir + '/tfrecords18',
-#            data_dir + '/tfrecords19'], '4': [data_dir + '/tfrecords20', data_dir + '/tfrecords21']}
-
-GROUP_NUM=8
-workers = {
-    '0': "vm-%d-1:2222" % GROUP_NUM,
-    '1': "vm-%d-1:2223" % GROUP_NUM,
-    '2': "vm-%d-1:2224" % GROUP_NUM,
-    '3': "vm-%d-1:2225" % GROUP_NUM,
-    '4': "vm-%d-1:2226" % GROUP_NUM,
-    '5': "vm-%d-2:2222" % GROUP_NUM,
-    '6': "vm-%d-2:2223" % GROUP_NUM,
-    '7': "vm-%d-2:2224" % GROUP_NUM,
-    '8': "vm-%d-2:2225" % GROUP_NUM,
-    '9': "vm-%d-2:2226" % GROUP_NUM,
-    '10': "vm-%d-3:2222" % GROUP_NUM,
-    '11': "vm-%d-3:2223" % GROUP_NUM,
-    '12': "vm-%d-3:2224" % GROUP_NUM,
-    '13': "vm-%d-3:2225" % GROUP_NUM,
-    '14': "vm-%d-3:2226" % GROUP_NUM,
-    '15': "vm-%d-4:2222" % GROUP_NUM,
-    '16': "vm-%d-4:2223" % GROUP_NUM,
-    '17': "vm-%d-4:2224" % GROUP_NUM,
-    '18': "vm-%d-4:2225" % GROUP_NUM,
-    '19': "vm-%d-4:2226" % GROUP_NUM,
-    '20': "vm-%d-5:2222" % GROUP_NUM,
-    '21': "vm-%d-5:2223" % GROUP_NUM
-}
-
 file_names = {
     '0': [data_dir + '/tfrecords00'],
     '1': [data_dir + '/tfrecords01'],
@@ -69,6 +41,7 @@ file_names = {
     '19': [data_dir + '/tfrecords09'],
 }
 NUM_WORKER = 20
+# this data structure is created to distribute the testing load to different tasks at different time instances
 ERROR_RUN_ON = [5,6,7,8,9,10,11,12,13,14,15]
 test_file_names = [data_dir + '/tfrecords22']
 
@@ -106,7 +79,6 @@ with g.as_default():
         counter = tf.Variable(tf.zeros([1], dtype=tf.int64), name="counter")
 
     # Compute the gradient
-    # dense_x = {}
     with tf.device("/job:worker/task:%d" % (FLAGS.task_index)):
         label, index, value = get_next_row(file_names[str(FLAGS.task_index)])
         w_filtered = None
@@ -143,21 +115,18 @@ with g.as_default():
         sign_expected = tf.sign(test_label[0])
         sign_values = [sign_actual, sign_expected]
 
-    # Create a session
+    # Create a session - the reason for this is explained in the comments at the start of this file
     with tf.Session("grpc://vm-8-1:2222") as sess: #+ str(workers[str(FLAGS.task_index)])) as sess:
         print "====================*************"
         # only one client initializes the variable
         if FLAGS.task_index == 0:
             sess.run(tf.initialize_all_variables())
-        # Start the queue readers
-        # Start input enqueue threads.
         coord = tf.train.Coordinator()
-        # Start the queue readers
         threads = tf.train.start_queue_runners(sess=sess, coord=coord)
         # Run n iterations
-        n = 3000
-        ep = 300
-        e = 30000
+        n = 3000 # number of iterations
+        e = 30000 # test examples to read for testing the model
+        ep = 300 # after how many iterations should test be run
         count = 0
         try:
             start_total = time.time()

@@ -35,7 +35,7 @@ tf.set_random_seed(1024)
 with g.as_default():
     label, index, value = get_next_row(file_names)
     # Create a model
-    w = tf.Variable(tf.zeros([num_features, 1]), name="model")
+    w = tf.Variable(tf.ones([num_features, 1]), name="model")
     w_filtered = tf.gather(w, index.values)
     x_filtered = tf.reshape(tf.convert_to_tensor(value.values, dtype=tf.float32), [tf.shape(value)[0], 1])
     l_filtered = label
@@ -67,9 +67,7 @@ with g.as_default():
     # update_model = tf.scatter_add(w, index_total, gradient_total)
 
     # TODO uncomment the below line for the correct calculations
-    total_index = index.values
-    total_values = tf.reshape(tf.mul(gradient, -0.01), shape=[tf.shape(value)[0], 1])
-    update_model = tf.scatter_add(w, total_index, total_values)
+    update_model = tf.scatter_add(w, index.values, tf.reshape(tf.mul(gradient, -0.01), shape=[tf.shape(value)[0], 1]))
 
 
     test_label, test_index, test_value = get_next_row(test_file_names)
@@ -89,25 +87,12 @@ with g.as_default():
     tf.train.start_queue_runners(sess=sess)
 
     # Run n iterations
-    n = 100
-    e = 1
+    n = 1
+    e = 2000
     count = 0
-    ep = 10
     start_total = time.time()
     for i in range(0, n):
-        start = time.time()
-        output = sess.run([value,update_model])
-        print (sum(output[1]))
-        # print "Time taken for training iteration " + str(i) + ": " + str(time.time() - start)
-        # if i % ep == 0:
-        #     start = time.time()
-        #     count = 0
-        #     print "done with iterations :: " + str(ep)
-        #     print "Calculating error..."
-        #     for j in range(0,e):
-        #         output_sign = sess.run(sign_values)
-        #         if output_sign[0] != output_sign[1]:
-        #             count+=1
-        #     print "*********Mistakes: " + str(count), str(e) + "**********"
-        #     print "Time in calculating mistakes on test set: " + str(time.time() - start)
+        # start_time = time.time()
+        output = sess.run(w_filtered)
+        print (output)
     print "Time taken for " + str(n) + " iteration :: " + str(time.time() - start_total)

@@ -10,16 +10,6 @@ g = tf.Graph()
 
 # Get the list of all files in the input data directory
 data_dir = "./data/criteo-tfr-big"
-# file_names = {
-#     '0': [data_dir + '/tfrecords00', data_dir + '/tfrecords01', data_dir + '/tfrecords02', data_dir + '/tfrecords03',
-#           data_dir + '/tfrecords04'],
-#     '1': [data_dir + '/tfrecords05', data_dir + '/tfrecords06', data_dir + '/tfrecords07', data_dir + '/tfrecords08',
-#           data_dir + '/tfrecords09'],
-#     '2': [data_dir + '/tfrecords10', data_dir + '/tfrecords11', data_dir + '/tfrecords12', data_dir + '/tfrecords13',
-#           data_dir + '/tfrecords14'],
-#     '3': [data_dir + '/tfrecords15', data_dir + '/tfrecords16', data_dir + '/tfrecords17', data_dir + '/tfrecords18',
-#           data_dir + '/tfrecords19'],
-#     '4': [data_dir + '/tfrecords20', data_dir + '/tfrecords21']}
 file_names = {
     '0': [data_dir + '/tfrecords00'],
     '1': [data_dir + '/tfrecords01'],
@@ -29,17 +19,17 @@ file_names = {
     '4': [data_dir + '/tfrecords05'],
     '5': [data_dir + '/tfrecords06'],
     '6': [data_dir + '/tfrecords07'],
-    '7': [data_dir + '/tfrecords08'],
+    '7': [data_dir + '/tfrecords08', data_dir + '/tfrecords09'],
 
     '8': [data_dir + '/tfrecords10'],
     '9': [data_dir + '/tfrecords11'],
     '10': [data_dir + '/tfrecords12'],
-    '11': [data_dir + '/tfrecords13'],
+    '11': [data_dir + '/tfrecords13', data_dir + '/tfrecords14'],
 
     '12': [data_dir + '/tfrecords15'],
     '13': [data_dir + '/tfrecords16'],
     '14': [data_dir + '/tfrecords17'],
-    '15': [data_dir + '/tfrecords18'],
+    '15': [data_dir + '/tfrecords18', data_dir + '/tfrecords19'],
 
     '16': [data_dir + '/tfrecords04'],
     '17': [data_dir + '/tfrecords09'],
@@ -78,8 +68,6 @@ with g.as_default():
     # Create a model
     with tf.device("/job:worker/task:0"):
         w = tf.Variable(tf.random_uniform([num_features, 1], -1, 1), name="model")
-        # w = tf.Variable(tf.zeros([num_features, 1]), name="model")
-
 
     # Compute the gradient
     gradients = []
@@ -124,7 +112,6 @@ with g.as_default():
         assign_op = tf.scatter_add(w, index_total, gradient_total)
 
         test_label, test_index, test_value = get_next_row(test_file_names)
-        # test_dense_x = get_dense_x(test_index, test_value)
         test_w_filtered = tf.gather(w, test_index.values)
         test_x_filtered = tf.convert_to_tensor(test_value.values, dtype=tf.float32)
         test_x_filtered = tf.reshape(test_x_filtered, [tf.shape(test_value)[0], 1])
@@ -140,9 +127,9 @@ with g.as_default():
         # Start the queue readers
         tf.train.start_queue_runners(sess=sess)
         # Run n iterations
-        n = 10000
-        e = 100000
-        ep = 1000
+        n = 10000 # number of iterations
+        e = 100000 # test examples to read for testing the model
+        ep = 1000 # after how many iterations should test be run
         count = 0
         try:
             start_total = time.time()

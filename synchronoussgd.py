@@ -1,5 +1,5 @@
 import tensorflow as tf
-import os
+import time
  ## TODO enhancement tf.sparse_tensor_dense_matmul(...)
 
 # Number of features
@@ -76,11 +76,10 @@ with g.as_default():
     tf.train.start_queue_runners(sess=sess)
 
     # Run n iterations
-    n = 2000
+    n = 10
     count = 0
     for i in range(0, n):
-        # print sum(out)
-        # output = sess.run(w)
-        # output_x = sess.run(dense_x)
+        start_time = time.time()
         output_g = sess.run(update_model)
-        print (output_g)
+        print "Time taken for 1 iteration :: " + str(i) + ' -- ' + str(time.time() - start_time)
+        # print (output_g)
