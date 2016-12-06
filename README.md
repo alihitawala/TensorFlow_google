@@ -1,0 +1,95 @@
+# 1. Matrix Multiplication 
+###How to run? - ./launch_bigmatrixmultiplication.sh
+## Time recorded for the complete multiplication : 145 sec (average on 5 runs)
+##  Formula used
+      tr(A2)=∑i∑jtr(AijAji)
+      
+Implementation trick:
+
+We observed the fact that A(ij) and A(ji) is on the same machine then the operation would be faster. Hence did the following things:
+
+1. Always keep A(ij) and A(ji) on the same machine 
+2. Do not burden a particular machine and hence distribute the trace evenly across the cluster.
+      
+We created a cache using hashmap to keep track of the traces and used that in our implementation. 
+
+# 2. Synchronous SGD
+###How to run? - ./launch_synchronoussgd.sh
+Learning rate : 0.01
+
+Number of parallel tasks used : 20 (4 on each VM)
+
+Time per iteration in sync mode with 20 tasks : 1.5 sec 
+
+**In local mode time for 100 iteration was 5 sec**
+
+*NOTE: We also have an implementation where we used 5 workers and the time per iteration in that was 1.2 secs*
+
+##Implementation details and ooptimizations done:
+
+1. Used 20 workers to parallize the job. This gave us 4X performance benefit in terms of number of training example trained on.
+2. Model 'w' was not tranferred everytime but the index filter was transferred to vm-1(task-0) and gather was done there to fetch the filtered 'w'. This reduced the network traffic earlier caused due to this transfer of dense vector w.
+3. Each example read from file were not transposed to any dense tensor but all the operations were done on the sparse tensor. We extracted the dense values from the Sparse tensors obtained and did all the calculations. This fasten our calculated by more than 100 fold.
+4. After all the gradient calculation the output was tranformed into a sparse-tensor and send back to vm-1. Using sparse tensor we saved a lot of network bandwidth.
+5. On vm-1 sparse add was used to add all the sparse tensor, since the output of sparse add gives a sparse tensor if both the argument is a sparse tensor we saved a lot of computation by avoiding a dense tensor addition.
+6. Finally we used scatter add to optimize the addition of a dense tensor 'w' and the gradient received as a sparse tensor.
+
+##Test example and calculating accuracy
+
+1. Read test example one row at a time
+2. Placed this calculation in vm-1 for faster fetch of 'w'
+3. It was able to test on 2000 example in some secs.
+
+# 3. Asynchronous SGD
+###How to run? - ./launch_asyncsgd.sh
+
+Learning rate : 0.01
+
+Number of parallel tasks used : 20 (4 on each VM)
+
+Time per iteration on each worker in async mode : ~5 sec 
+
+##Implementation details and optimizations done:
+
+All the decision taken in Sync mode applies here. In addition we did:
+
+1. All the session were executed in vm-1 task-0. This was done because if we will uniformly distribute session across all workers then we saw degradation in the time obtained per iteration. Specifically:
+
+**Session on different vms** - time obtained = 6.65 sec per iteration (aggregated average)
+
+**Session on vm-1 task-0** - time obtained = 3.45 sec per iteration (aggregated average)
+
+The explanation for the above has been stated in our report submitted.
+
+###Accuracy and how to keep track of iterations done in async?
+We kept note of number of iterations locally this is the approx method and worked quiet well for us. With the global tracker we faced issue of race conditions.
+We distributed the task of calculating error rate to different tasks. This gave all the task to run for the same amount of time as - if we run all the test on single worker that worker will finish last and also the last few error rates will be on approx same number of iterations. 
+
+# 4. Batch synchronous SGD
+###How to run? - ./launch_batchsynchronoussgd.sh
+Learning rate : 0.01
+
+Number of parallel tasks used : 5 (1 on each VM)
+
+Time per iteration in sync mode with 20 tasks : 1.6 sec 
+
+##Implementation details and optimizations done:
+
+All the decision taken in Sync mode applies here. In addition we did:
+
+1. Read a batch of example and in a loop slice each example to calculate local_gradient
+2. All the operations were done on sparse tensor
+3. Added all the local gradients and calculated the total_gradient and passed to the vm-1 for aggregation
+4. Aggregation was done similar to what we did on sync mode (with all optimizations)
+
+
+# 4. Batch Asynchronous SGD
+###How to run? - ./launch_asyncsgd.sh
+Learning rate : 0.01
+
+Number of parallel tasks used : 20 (4 on each VM)
+
+Time per iteration on a worker in async mode : 5 sec 
+
+##Implementation details and optimizations done:
+Similar to the combination of async (without batch) and sync (batch).
