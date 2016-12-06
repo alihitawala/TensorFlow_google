@@ -154,6 +154,7 @@ with g.as_default():
         calculate_error = False
         try:
             start_total = time.time()
+            print "Executing batch async sgd with batch size " + str(BATCH_SIZE) + ", iterations : " + str(n) + ", workers : " + str(NUM_WORKER)
             for i in range(0, n):
                 start = time.time()
                 sess.run(assign_op)
